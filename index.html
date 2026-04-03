@@ -104,41 +104,16 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 #cov{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,5vw,28px);color:var(--go);letter-spacing:3px;text-shadow:0 0 14px rgba(255,215,0,.7);}
 #col{font-size:7px;color:#ffd70077;letter-spacing:3px;text-transform:uppercase;}
 
-/* Ability HUD */
-#ah{position:absolute;top:52px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;opacity:0;transition:opacity .3s;min-width:80px;}
-#ah.vis{opacity:1;}
-.ahr{display:flex;align-items:center;gap:5px;}
-#ai{font-size:15px;line-height:1;}
-#al{font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;}
-#acdw{width:76px;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
-#acdb{height:100%;border-radius:3px;transition:width .1s linear;}
-#adw{width:76px;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;display:none;}
-#adb{height:100%;border-radius:2px;animation:dp .8s ease-in-out infinite alternate;}
-@keyframes dp{0%{opacity:.5}100%{opacity:1}}
-#ast{font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:700;}
-#ast.rdy{color:var(--pr);text-shadow:0 0 8px rgba(0,245,160,.5);}
-#ast.act{color:var(--go);text-shadow:0 0 8px rgba(255,215,0,.6);}
-#ast.cd{color:var(--mu);}
+/* Character Traits HUD */
+#th{position:absolute;top:52px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;opacity:0;transition:opacity .3s;min-width:120px;}
+#th.vis{opacity:1;}
+#ti{font-size:14px;line-height:1;margin-bottom:3px;}
+#tname{font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;}
+.trait{font-size:7px;line-height:1.3;color:var(--tx);padding:2px 4px;background:rgba(0,245,160,.12);border-left:2px solid #00f5a0;padding-left:6px;}
 
 /* Mode badge */
 #mbadge{position:absolute;top:52px;right:12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:4px 10px;border-radius:6px;opacity:0;transition:opacity .3s;}
 #mbadge.vis{opacity:1;}
-
-/* Mobile ability button */
-#mab{
-  position:absolute;bottom:22px;right:16px;width:64px;height:64px;border-radius:50%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  pointer-events:all;opacity:0;transition:opacity .3s;
-  border:2px solid var(--cy);background:rgba(0,0,0,.78);
-  box-shadow:0 0 16px rgba(0,207,255,.2);
-  touch-action:manipulation;cursor:pointer;
-}
-#mab.vis{opacity:1;}
-#mab:active{transform:scale(.86);}
-#mab.rdy{animation:mbp 1.4s ease-in-out infinite;}
-@keyframes mbp{0%,100%{box-shadow:0 0 14px rgba(0,207,255,.3)}50%{box-shadow:0 0 28px rgba(0,207,255,.8)}}
-#mai{font-size:22px;line-height:1;}
-#mcd{font-size:7px;letter-spacing:1px;color:var(--mu);}
 
 /* Jump dots */
 #jd{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;opacity:0;transition:opacity .3s;}
@@ -404,17 +379,16 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   <div class="rpill"><span style="font-size:13px">💎</span><span class="rpill-v" id="hud-gems" style="color:var(--gm)">0</span></div>
 </div>
 <div id="spw"><div id="spb"></div></div>
-<div id="ah">
-  <div class="ahr"><div id="ai">⚡</div><div id="al">Ability</div></div>
-  <div id="acdw"><div id="acdb"></div></div>
-  <div id="adw"><div id="adb"></div></div>
-  <div id="ast" class="rdy">▶ READY</div>
+<div id="th">
+  <div id="ti">✦ TRAITS</div>
+  <div id="tname"></div>
+  <div id="tlist"></div>
 </div>
 <div id="mbadge"></div>
 <div id="combo"><div id="cov">x2</div><div id="col">Combo</div></div>
 <div id="jd"><div class="jdot" id="jd1"></div><div class="jdot" id="jd2"></div></div>
 <div id="msb"></div>
-<div id="mab" class="rdy"><div id="mai">⚡</div><div id="mcd">READY</div></div>
+
 <div id="afl"></div><div id="ari"></div><div id="slov"></div>
 
 <!-- ► START SCREEN -->
@@ -446,8 +420,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   </div>
   <div class="ch">
     <kbd>SPACE</kbd>/<kbd>CLICK</kbd> jump &nbsp;
-    <kbd class="dk">A</kbd>/<kbd class="dk">SHIFT</kbd>/<kbd class="dk">D-TAP</kbd> ability
-  </div>
+    <kbd class="dk">⛑️</kbd> traits active</div>
 </div>
 
 <!-- ► MODE SELECT
@@ -681,6 +654,15 @@ const CHARS={
   bubble:{id:'bubble',name:'Bubble',price:550,cur:'coins',rarity:'rare',color:'#88eeff',eyeColor:'#002233',glow:'#66ddff',shape:'round',
     ability:'Bubble 12s',abilDesc:'Absorbs 2 hits',gravMult:0.75,fallMult:0.9,jumpVel:-12.5,baseCD:200,baseDur:720,
     upgrades:[{name:'Lv2',desc:'4 hit bubble',cdB:0,sb:'bubbleHits:4'},{name:'Lv3',desc:'+50 pts/hit',cdB:25,sb:'bubbleB:50'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[90,180,340]},
+  vortex:{id:'vortex',name:'Vortex',price:1200,cur:'coins',rarity:'epic',color:'#aa44ff',eyeColor:'#1a0a2d',glow:'#cc66ff',shape:'star',
+    ability:'Spin 10s',abilDesc:'Spin & deflect obstacles',gravMult:0.95,fallMult:1.35,jumpVel:-14,baseCD:260,baseDur:600,
+    upgrades:[{name:'Lv2',desc:'Wider spin',cdB:0,sb:'spinR:1.5'},{name:'Lv3',desc:'+3s spin',cdB:30,sb:'spinDur:1.3'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[130,260,500]},
+  chrono:{id:'chrono',name:'Chrono',price:1400,cur:'coins',rarity:'epic',color:'#ffdd00',eyeColor:'#2d2200',glow:'#ffff44',shape:'diamond',
+    ability:'Rewind 8s',abilDesc:'Go back in time 5s',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:300,baseDur:480,
+    upgrades:[{name:'Lv2',desc:'Rewind 7s',cdB:0,sb:'rewindDur:1.4'},{name:'Lv3',desc:'+2 rewinds',cdB:35,sb:'rewindCount:2'},{name:'Lv4',desc:'CD -60',cdB:60,sb:''}],pUpg:[140,280,550]},
+  apex:{id:'apex',name:'Apex',price:2000,cur:'coins',rarity:'legend',color:'#ff00ff',eyeColor:'#330033',glow:'#ff44ff',shape:'rect',
+    ability:'Peak Power',abilDesc:'Max stats 12s',gravMult:1,fallMult:1.5,jumpVel:-16,baseCD:320,baseDur:720,
+    upgrades:[{name:'Lv2',desc:'Longer peak',cdB:0,sb:'peakDur:1.4'},{name:'Lv3',desc:'x2 coins/peak',cdB:40,sb:'peakCoin:2'},{name:'Lv4',desc:'CD -80',cdB:80,sb:''}],pUpg:[200,400,800]},
 };
 
 const SKINS={
@@ -704,6 +686,11 @@ const SKINS={
   aurora:{id:'aurora',name:'Aurora',price:5,cur:'gems',rarity:'legend',effect:'aurora',desc:'Northern lights',col:'#44ffaa'},
   obsidian:{id:'obsidian',name:'Obsidian',price:450,cur:'coins',rarity:'rare',effect:'obsidian',desc:'Dark gloss',col:'#220033'},
   dark_matter:{id:'dark_matter',name:'Dark Matter',price:8,cur:'gems',rarity:'legend',effect:'dark_matter',desc:'Antimatter',col:'#220055'},
+  inferno:{id:'inferno',name:'Inferno',price:700,cur:'coins',rarity:'epic',effect:'inferno',desc:'Burning rage',col:'#ff4400'},
+  mirage:{id:'mirage',name:'Mirage',price:550,cur:'coins',rarity:'epic',effect:'mirage',desc:'Heat shimmer',col:'#ffaa00'},
+  nexus:{id:'nexus',name:'Nexus',price:750,cur:'coins',rarity:'epic',effect:'nexus',desc:'Reality warp',col:'#00aaff'},
+  frost:{id:'frost',name:'Frost',price:600,cur:'coins',rarity:'epic',effect:'frost',desc:'Icy aura',col:'#00aaff'},
+  stellar:{id:'stellar',name:'Stellar',price:900,cur:'coins',rarity:'epic',effect:'stellar',desc:'Starlight',col:'#ffaaff'},
 };
 
 const BGS={
@@ -719,6 +706,9 @@ const BGS={
   volcano:{id:'volcano',name:'Volcano',price:900,cur:'coins',rarity:'epic',desc:'Lava & ash',prev:'background:linear-gradient(#180000,#2a0800)'},
   cyber:{id:'cyber',name:'Cyber',price:6,cur:'gems',rarity:'legend',desc:'Digital realm',prev:'background:linear-gradient(#000a18,#001a10)'},
   galaxy:{id:'galaxy',name:'Galaxy',price:8,cur:'gems',rarity:'legend',desc:'Spiral galaxy',prev:'background:linear-gradient(#060010,#100020)'},
+  abyss:{id:'abyss',name:'Abyss',price:1200,cur:'coins',rarity:'epic',desc:'Deep dark void',prev:'background:linear-gradient(#000000,#0a0015)'},
+  nexus:{id:'nexus',name:'Nexus Realm',price:1500,cur:'coins',rarity:'epic',desc:'Digital nexus',prev:'background:linear-gradient(#0f0030,#200050)'},
+  aurora_realm:{id:'aurora_realm',name:'Aurora Realm',price:10,cur:'gems',rarity:'legend',desc:'Aurora borealis',prev:'background:linear-gradient(#001050,#100080)'},
 };
 
 const PU_DATA=[
@@ -727,6 +717,9 @@ const PU_DATA=[
   {id:'slowmo_pu',name:'Slow Start',icon:'⏱',price:100,cur:'coins',rarity:'rare',desc:'First 30s at 70% speed',eff:'slowstart'},
   {id:'score_pu',name:'Score Boost',icon:'⭐',price:60,cur:'coins',rarity:'common',desc:'2× score for 20s',eff:'scoremult'},
   {id:'gem_pu',name:'Gem Finder',icon:'💎',price:3,cur:'gems',rarity:'epic',desc:'Find gems in next run',eff:'gemfinder'},
+  {id:'speed_pu',name:'Speed Surge',icon:'🚀',price:75,cur:'coins',rarity:'rare',desc:'+10% speed entire run',eff:'speedup'},
+  {id:'double_jump_pu',name:'Double Jump',icon:'🦘',price:90,cur:'coins',rarity:'rare',desc:'+2 extra jumps',eff:'extrajumps'},
+  {id:'invincible_pu',name:'Invincibility',icon:'⚔️',price:200,cur:'coins',rarity:'epic',desc:'30s protection',eff:'invincible'},
 ];
 
 // ── Runner Pass Tiers ────────────────────────────────────
@@ -741,6 +734,26 @@ const PASS=[
   {lv:8,xp:6500,icon:'💎',name:'Gems',     rew:{gems:25}},
   {lv:9,xp:8500,icon:'🪙',name:'Coins',    rew:{coins:1000}},
   {lv:10,xp:11000,icon:'⚡',name:'Storm',  rew:{char:'storm'}},
+  {lv:11,xp:13500,icon:'🪙',name:'Coins',  rew:{coins:750}},
+  {lv:12,xp:16200,icon:'💎',name:'Gems',   rew:{gems:30}},
+  {lv:13,xp:19200,icon:'🎨',name:'Crystal Skin',rew:{skin:'crystal'}},
+  {lv:14,xp:22500,icon:'🪙',name:'Coins',  rew:{coins:1500}},
+  {lv:15,xp:26000,icon:'💎',name:'Gems',   rew:{gems:50}},
+  {lv:16,xp:29800,icon:'🎨',name:'Aurora Skin',rew:{skin:'aurora'}},
+  {lv:17,xp:33800,icon:'🪙',name:'Coins',  rew:{coins:2000}},
+  {lv:18,xp:38000,icon:'💎',name:'Gems',   rew:{gems:40}},
+  {lv:19,xp:42500,icon:'⚡',name:'Phoenix', rew:{char:'phoenix'}},
+  {lv:20,xp:47200,icon:'🪙',name:'Coins',  rew:{coins:3000}},
+  {lv:21,xp:52000,icon:'💎',name:'Gems',   rew:{gems:60}},
+  {lv:22,xp:57000,icon:'🎨',name:'Dark Matter Skin',rew:{skin:'dark_matter'}},
+  {lv:23,xp:62200,icon:'🪙',name:'Coins',  rew:{coins:2500}},
+  {lv:24,xp:67500,icon:'💎',name:'Gems',   rew:{gems:50}},
+  {lv:25,xp:73000,icon:'⚡',name:'Specter', rew:{char:'specter'}},
+  {lv:26,xp:78500,icon:'🪙',name:'Coins',  rew:{coins:4000}},
+  {lv:27,xp:84500,icon:'💎',name:'Gems',   rew:{gems:75}},
+  {lv:28,xp:90500,icon:'🌟',name:'Ultimate Boost',rew:{coins:5000,gems:100}},
+  {lv:29,xp:97000,icon:'👑',name:'Legend Pack',rew:{coins:6000,gems:150}},
+  {lv:30,xp:104000,icon:'🏆',name:'Max Reward',rew:{coins:10000,gems:200}},
 ];
 
 // ── Daily Missions ───────────────────────────────────────
@@ -758,16 +771,28 @@ const MPOOL=[
 
 // ── Achievements ─────────────────────────────────────────
 const ACHS=[
-  {id:'first', icon:'🎮',name:'First Steps',  desc:'Complete first run',     chk:s=>s.runs>=1,   rew:{coins:50}},
-  {id:'r10',   icon:'🏃',name:'Regular',      desc:'10 runs completed',      chk:s=>s.runs>=10,  rew:{coins:200}},
-  {id:'r50',   icon:'🏅',name:'Veteran',      desc:'50 runs completed',      chk:s=>s.runs>=50,  rew:{coins:500,gems:5}},
-  {id:'sc1k',  icon:'🎯',name:'Four Digits',  desc:'Score 1000',             chk:s=>s.bestScore>=1000,rew:{coins:300}},
-  {id:'sc5k',  icon:'🏆',name:'Legend',       desc:'Score 5000',             chk:s=>s.bestScore>=5000,rew:{coins:1000,gems:20}},
-  {id:'cb10',  icon:'🔥',name:'Combo Master', desc:'x10 combo',              chk:s=>s.bestCombo>=10, rew:{coins:400}},
-  {id:'nm20',  icon:'💨',name:'Daredevil',    desc:'20 near misses',         chk:s=>s.nearMisses>=20,rew:{coins:200}},
-  {id:'pj10',  icon:'⭐',name:'Perfect',      desc:'10 perfect jumps',       chk:s=>s.perfectJumps>=10,rew:{coins:300}},
-  {id:'c5ch',  icon:'🧍',name:'Collector',    desc:'Unlock 5 characters',    chk:_=>SD.chars.length>=5,rew:{gems:15}},
-  {id:'s7',    icon:'📅',name:'Dedicated',    desc:'7 day login streak',     chk:_=>SD.loginStreak>=7,rew:{gems:20,coins:500}},
+  {id:'first', icon:'🎮',name:'First Steps',  desc:'Complete first run',          chk:s=>s.runs>=1,   rew:{coins:50}},
+  {id:'r10',   icon:'🏃',name:'Regular',      desc:'10 runs completed',           chk:s=>s.runs>=10,  rew:{coins:200}},
+  {id:'r50',   icon:'🏅',name:'Veteran',      desc:'50 runs completed',           chk:s=>s.runs>=50,  rew:{coins:500,gems:5}},
+  {id:'r100',  icon:'⭐',name:'Century',      desc:'100 runs completed',          chk:s=>s.runs>=100, rew:{coins:1000,gems:25}},
+  {id:'r250',  icon:'👑',name:'Elite Runner', desc:'250 runs completed',          chk:s=>s.runs>=250, rew:{coins:2500,gems:50}},
+  {id:'sc1k',  icon:'🎯',name:'Four Digits',  desc:'Score 1000',                 chk:s=>s.bestScore>=1000,rew:{coins:300}},
+  {id:'sc5k',  icon:'🏆',name:'Legend',       desc:'Score 5000',                 chk:s=>s.bestScore>=5000,rew:{coins:1000,gems:20}},
+  {id:'sc10k', icon:'💰',name:'Millionaire',  desc:'Score 10000',                chk:s=>s.bestScore>=10000,rew:{coins:3000,gems:75}},
+  {id:'cb5',   icon:'⚡',name:'Hot Streak',   desc:'x5 combo',                   chk:s=>s.bestCombo>=5, rew:{coins:150}},
+  {id:'cb10',  icon:'🔥',name:'Combo Master', desc:'x10 combo',                  chk:s=>s.bestCombo>=10, rew:{coins:400}},
+  {id:'cb20',  icon:'💥',name:'Infinite Rhythm', desc:'x20 combo',               chk:s=>s.bestCombo>=20, rew:{coins:800,gems:30}},
+  {id:'nm20',  icon:'💨',name:'Daredevil',    desc:'20 near misses',             chk:s=>s.nearMisses>=20,rew:{coins:200}},
+  {id:'nm50',  icon:'🤸',name:'Close Caller', desc:'50 near misses',             chk:s=>s.nearMisses>=50,rew:{coins:500,gems:15}},
+  {id:'pj10',  icon:'⭐',name:'Perfect',      desc:'10 perfect jumps',           chk:s=>s.perfectJumps>=10,rew:{coins:300}},
+  {id:'pj30',  icon:'✨',name:'Flawless',     desc:'30 perfect jumps',           chk:s=>s.perfectJumps>=30,rew:{coins:750,gems:25}},
+  {id:'c5ch',  icon:'🧍',name:'Collector',    desc:'Unlock 5 characters',        chk:_=>SD.chars.length>=5,rew:{gems:15}},
+  {id:'c12ch', icon:'👥',name:'Full Squad',   desc:'Unlock 12 characters',       chk:_=>SD.chars.length>=12,rew:{gems:50,coins:1000}},
+  {id:'s7',    icon:'📅',name:'Dedicated',    desc:'7 day login streak',         chk:_=>SD.loginStreak>=7,rew:{gems:20,coins:500}},
+  {id:'s30',   icon:'🔥',name:'Unstoppable',  desc:'30 day login streak',        chk:_=>SD.loginStreak>=30,rew:{gems:100,coins:3000}},
+  {id:'abi50', icon:'⚡',name:'Ability Master',desc:'Use abilities 50 times',    chk:s=>s.abilitiesUsed>=50,rew:{gems:40,coins:500}},
+  {id:'co1k',  icon:'🪙',name:'Entrepreneur', desc:'Earn 1000 coins in total',   chk:s=>s.coinsEarned>=1000,rew:{gems:20}},
+  {id:'dist5k',icon:'🛣️',name:'Marathoner',   desc:'Run 5km distance total',     chk:s=>s.totalDist>=5000,rew:{gems:35,coins:800}},
 ];
 
 // ── Game Modes ───────────────────────────────────────────
@@ -860,7 +885,7 @@ const BS=5,MS=16,SA=0.001;
 const COY=8,JBF=10,NMR=36,PPX=20,DDR=12;
 const MILESTONES=[100,300,600,1200,2000,3500,6000];
 const MSLBLS=['⚡ SPEED UP!','⚡ SPEED UP!','🔥 LEVEL UP!','🔥 LEVEL UP!','💥 MAX SPEED!','🏆 LEGEND!','👑 UNSTOPPABLE!'];
-const AICONS={runner:'⚡',glider:'🌊',dasher:'💨',ghost:'👻',magnet:'🔮',timebender:'⏱',jumper:'🌀',tank:'🛡',ninja:'🌑',phoenix:'🔥',storm:'⛈',specter:'👁',mech:'🤖',bubble:'🫧'};
+const AICONS={runner:'⚡',glider:'🌊',dasher:'💨',ghost:'👻',magnet:'🔮',timebender:'⏱',jumper:'🌀',tank:'🛡',ninja:'🌑',phoenix:'🔥',storm:'⛈',specter:'👁',mech:'🤖',bubble:'🫧',vortex:'🌪',chrono:'⏳',apex:'👑'};
 const GCOL={bg:'#07070d',gnd:'#0d0d17',ge:'#00f5a0',sp:'#ff3864',wa:'#ff3864',gr:'rgba(255,255,255,.017)'};
 
 // ── Game State ─────────────────────────────────────────────
@@ -874,13 +899,13 @@ let player={},plats=[],obs=[];
 let coinsRun=0,gemsRun=0,xpRun=0;
 let scoreMult=1,scoreMultT=0;
 // Ability
-let abilCD=0,abilActive=false,abilTimer=0,abilMaxDur=1;
+
 let slowOn=false,slowMult=1;
 let shieldHits=0,shieldOn=false;
 let phxLeft=0,coinMult=1,ninjaClone=null;
 let stormOn=false,specShrunk=false,bubbleOn=false,bubbleHits=0;
 // Run extras
-let runPUs=[],gemFinder=false,abilsUsedRun=0,taTimer=0;
+let runPUs=[],gemFinder=false,taTimer=0;
 
 // ── Resource Helpers ──────────────────────────────────────
 function addCoins(n){SD.coins+=n;SD.stats.coinsEarned=(SD.stats.coinsEarned||0)+n;refreshCurrency();}
@@ -898,20 +923,15 @@ function refreshCurrency(){
 }
 
 // ── Upgrade Helpers ───────────────────────────────────────
-function upgLv(id){return SD.upgrades[id]||0;}
-function getCD(id){
-  const ch=CHARS[id],lv=upgLv(id);let cd=ch.baseCD;
-  ch.upgrades.forEach((u,i)=>{if(lv>i+1)cd-=u.cdB;});
-  return Math.max(20,cd);
-}
-function getDur(id){
-  const ch=CHARS[id],lv=upgLv(id);let dur=ch.baseDur;
-  const dm=getStat(id,'glideDM')||getStat(id,'slowDur')||getStat(id,'phaseDur')||getStat(id,'stormDur')||getStat(id,'shrinkDur')||1;
-  if(dm!==1)dur=Math.round(dur*dm);
-  return dur;
+function upgLv(id){
+  if(!id||!SD.upgrades)return 0;
+  return SD.upgrades[id]||0;
 }
 function getStat(id,stat){
-  const ch=CHARS[id],lv=upgLv(id);
+  const ch=CHARS[id];
+  if(!ch)return null;
+  const lv=upgLv(id);
+  if(!ch.upgrades)return null;
   for(let i=0;i<lv-1&&i<ch.upgrades.length;i++){
     const s=ch.upgrades[i].sb||'';
     if(s.startsWith(stat+':'))return parseFloat(s.split(':')[1]);
@@ -1281,23 +1301,11 @@ document.querySelectorAll('.shtab').forEach(t=>{
   bindPressable(t,()=>switchShopTab(t.dataset.tab));
 });
 
-// Mobile ability button
-const mabEl=$('mab');
-if(mabEl){
-  mabEl.addEventListener('pointerdown',e=>{
-    e.preventDefault();e.stopPropagation();
-    mabEl.classList.add('pressing');
-    initAudio();activateAbility();
-  },{passive:false});
-  mabEl.addEventListener('pointerup',()=>{mabEl.classList.remove('pressing');});
-  mabEl.addEventListener('pointercancel',()=>{mabEl.classList.remove('pressing');});
-  mabEl.addEventListener('touchstart',e=>{e.preventDefault();},{passive:false});
-}else console.warn('Mobile ability button (#mab) not found');
+
 
 // Keyboard
 document.addEventListener('keydown',e=>{
   if(e.code==='Space'){e.preventDefault();initAudio();if(gState==='play')tryJump();else if(gState==='menu')startGame();}
-  if(e.code==='KeyA'||e.code==='ShiftLeft'||e.code==='ShiftRight'){e.preventDefault();if(gState==='play')activateAbility();}
   if(e.code==='Escape'&&gState!=='play'&&gState!=='menu'){showMenu();}
 });
 
@@ -1314,17 +1322,9 @@ function handleGameplayTap(e){
   // Clear previous tap timeout
   if(tapTimeout){clearTimeout(tapTimeout);tapTimeout=null;}
   
-  if(tapGap<280){
-    // Double-tap detected — activate ability
-    lastTap=0;
-    activateAbility();
-  }else{
-    // Single tap — jump
-    lastTap=now;
-    tryJump();
-    // Set timeout to clear the tap if no second tap comes
-    tapTimeout=setTimeout(()=>{lastTap=0;tapTimeout=null;},280);
-  }
+  // Always jump on tap (traits are passive, no ability activation)
+  lastTap=0;
+  tryJump();
 }
 const W_el=$('W');
 if(W_el){W_el.addEventListener('pointerdown',handleGameplayTap,{passive:false});}
@@ -1348,6 +1348,7 @@ function goToMenu(){stopBGM();hideAllGameHUD();showMenu();gState='menu';}
 function startGame(){
   curMode=SD.gameMode||'endless';
   initGame();gState='play';
+  console.log('🎮 Game started! gState:',gState,'Character:',SD.selChar);
   // Hide all screens
   ALL_SCREENS.forEach(s=>{const el=$(s);if(el)el.classList.add('H');});
   // Show gameplay HUD
@@ -1393,7 +1394,6 @@ function showGameOver(){
   updateMission('bestCombo',bestComboRun);
   updateMission('nearMisses',SD.stats.nearMisses||0);
   updateMission('perfectJumps',SD.stats.perfectJumps||0);
-  updateMission('abilitiesUsed',abilsUsedRun);
   updateMission('coinsEarned',earnedCoins);
   checkAchievements();save();
   // Animate score counter
@@ -1447,92 +1447,78 @@ function setupAbilHUD(){
     if(mab)mab.classList.remove('vis');
   }
 }
-function updateAbilHUD(dt){
-  const cd=getCD(SD.selChar);
-  const adb=$('adb'),ast=$('ast'),acdb=$('acdb'),mcd=$('mcd');
+
+// ── Character Traits System ────────────────────────────────
+function setupTraits(){
+  const ch=CHARS[SD.selChar];
+  if(!ch)return;
   
-  if(abilActive&&abilTimer>0){
-    if(adb)adb.style.width=Math.max(0,(abilTimer/abilMaxDur))*100+'%';
-    if(ast){ast.className='act';ast.textContent=`⚡ ${Math.ceil(abilTimer/60)}s`;}
-    if(mcd)mcd.textContent=Math.ceil(abilTimer/60)+'s';
-  }else if(abilCD>0){
-    abilCD-=dt;
-    if(acdb)acdb.style.width=Math.max(0,(1-abilCD/cd))*100+'%';
-    const sec=Math.ceil(abilCD/60);
-    if(ast){ast.className='cd';ast.textContent=sec+'s';}
-    if(mcd)mcd.textContent=sec+'s';
-    if(abilCD<=0){
-      if(ast){ast.className='rdy';ast.textContent='▶ READY';}
-      if(mcd)mcd.textContent='READY';
-      if(mabEl)mabEl.classList.add('rdy');
-    }
-  }else{
-    if(acdb)acdb.style.width='100%';
-    if(!abilActive){
-      if(ast){ast.className='rdy';ast.textContent='▶ READY';}
-      if(mabEl)mabEl.classList.add('rdy');
-    }
+  // Apply passive traits based on character
+  switch(SD.selChar){
+    case 'runner':    gSpeed*=1.15;break;       // Speed boost
+    case 'glider':    player.fallMult=.7;break;       // Reduced fall
+    case 'dasher':    player.dashTrailT=1;break;      // Quick dash
+    case 'ghost':     break;                     // Phase through (handled in game logic)
+    case 'magnet':    coinMult=2;break;          // Double coins passively
+    case 'timebender': break;                    // Slow-mo (handled in game)
+    case 'jumper':    player.jumpsLeft+=3;break; // Extra jumps
+    case 'tank':      shieldOn=true;shieldHits=3;break; // Shield active
+    case 'ninja':     break;                     // Blink handled in game
+    case 'storm':     break;                     // Thunder handled
+    case 'specter':   break;                     // Shrink handled
+    case 'mech':      player.vy+=2;break;        // Higher jump
+    case 'bubble':    bubbleOn=true;bubbleHits=2;break; // Bubble active
+    case 'vortex':    break;                     // Spin handled
+    case 'chrono':    break;                     // Rewind handled
+    case 'apex':      gSpeed*=1.2;player.jumpVel=-15;break; // Peak power
+    case 'phoenix':   phxLeft=1;break;           // Rebirth active
   }
+  
+  // Display traits HUD
+  updateTraitsHUD();
+  
+  // Visual feedback
+  ftxt(`⛑️ ${ch.name} Traits Active`,PX+PW/2,GY-PH-50,ch.glow,13);
+  burst(15,ch.glow);
 }
 
-// ── Ability Activation ────────────────────────────────────
-function activateAbility(){
-  if(curMode==='zen')return;
-  if(SD.selChar==='phoenix'){ftxt('REBIRTH PASSIVE',player.x+PW/2,player.y-20,CHARS.phoenix.glow,13);return;}
-  if(abilCD>0)return;
+// Update traits display on screen
+function updateTraitsHUD(){
   const ch=CHARS[SD.selChar];
-  abilMaxDur=getDur(SD.selChar);abilTimer=abilMaxDur;
-  abilCD=getCD(SD.selChar);abilActive=true;abilsUsedRun++;
-  sfxAbil();
-  $('afl').style.background=`radial-gradient(ellipse at 50% 80%,${ch.color}55,transparent)`;
-  $('afl').style.opacity='1';setTimeout(()=>$('afl').style.opacity='0',300);
-  $('ari').style.boxShadow=`inset 0 0 0 3px ${ch.color}88,inset 0 0 20px ${ch.color}33`;
-  $('ari').classList.add('show');
-  $('adw').style.display='block';
-  mabEl.classList.remove('rdy');
-  // Dispatch to correct ability
-  switch(SD.selChar){
-    case 'runner':    doBoost(ch);break;
-    case 'glider':    doGlide(ch);break;
-    case 'dasher':    doDasher(ch);break;
-    case 'ghost':     doPhase(ch);break;
-    case 'magnet':    doMagnet(ch);break;
-    case 'timebender':doSlowMo(ch);break;
-    case 'jumper':    doJumper(ch);break;
-    case 'tank':      doShield(ch);break;
-    case 'ninja':     doNinja(ch);break;
-    case 'storm':     doStorm(ch);break;
-    case 'specter':   doSpecter(ch);break;
-    case 'mech':      doMech(ch);break;
-    case 'bubble':    doBubble(ch);break;
+  if(!ch)return;
+  const th=$('th'),tname=$('tname'),tlist=$('tlist');
+  if(!th)return;
+  
+  if(tname)tname.textContent=ch.name.toUpperCase();
+  
+  const traits={
+    runner:'✦ Speed +15% faster',
+    glider:'✦ Float slower gravity',
+    dasher:'✦ Quick dashes',
+    ghost:'✦ Pass through walls',
+    magnet:'✦ Double coins',
+    timebender:'✦ Activate slow-mo',
+    jumper:'✦ +3 extra jumps',
+    tank:'✦ 🛡️ 3-hit shield',
+    ninja:'✦ Teleport & clone',
+    storm:'✦ Freeze obstacles',
+    specter:'✦ Shrink ability',
+    mech:'✦ Higher jump power',
+    bubble:'✦ Bubble protection',
+    vortex:'✦ Spin deflect',
+    chrono:'✦ Rewind time',
+    apex:'✦ Peak mode: 50% faster',
+    phoenix:'✦ Auto-rebirth'
+  };
+  
+  if(tlist){
+    tlist.innerHTML='<div class="trait">'+traits[SD.selChar]+'</div>';
   }
+  
+  th.classList.add('vis');
 }
-function endAbility(){
-  abilActive=false;$('ari').classList.remove('show');$('adw').style.display='none';
-  player.glideActive=false;coinMult=1;stormOn=false;specShrunk=false;
-  player.dashFrenzy=false;
-  if(SD.selChar==='timebender'){slowOn=false;slowMult=1;$('slov').style.opacity='0';}
-}
-// Individual ability effects
-function doBoost(ch){const m=getStat('runner','boostMult')||1.2;gSpeed=Math.min(gSpeed*m,MS+2);ftxt('BOOST!',player.x+PW/2,player.y-22,ch.color,18);burst(18,ch.color);}
-function doGlide(ch){player.glideActive=true;player.glideMult=getStat('glider','glideMult')||.5;ftxt('GLIDE!',player.x+PW/2,player.y-22,ch.color,18);}
-function doDasher(ch){player.dashFrenzy=true;player.dashFrenzyT=0;ftxt('DASH FRENZY!',player.x+PW/2,player.y-22,ch.color,16);burst(18,ch.color);}
-function doPhase(ch){const dur=abilMaxDur*(getStat('ghost','phaseDur')||1);player.ghostT=Math.max(abilMaxDur,dur);player.ghosted=true;ftxt('PHASE!',player.x+PW/2,player.y-22,ch.color,18);burst(18,ch.color);}
-function doMagnet(ch){coinMult=getStat('magnet','coinMult')||3;ftxt(`🪙 x${coinMult}`,player.x+PW/2,player.y-22,ch.color,18);}
-function doSlowMo(ch){const d=getStat('timebender','slowDepth')||.5;slowOn=true;slowMult=1-d;$('slov').style.background='radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(255,220,0,.08) 100%)';$('slov').style.boxShadow='inset 0 0 0 3px rgba(255,220,0,.25)';$('slov').style.opacity='1';ftxt('SLOW-MO!',player.x+PW/2,player.y-22,ch.color,18);}
-function doJumper(ch){const ex=getStat('jumper','extraJumps')||5;player.jumpsLeft+=Math.floor(ex);ftxt(`+${Math.floor(ex)} JUMPS`,player.x+PW/2,player.y-22,ch.color,16);burst(12,ch.color);updateJumpDots();}
-function doShield(ch){const h=getStat('tank','shieldHits')||3;shieldOn=true;shieldHits=h;ftxt(`SHIELD ×${h}`,player.x+PW/2,player.y-22,ch.color,16);burst(20,ch.color);}
-function doNinja(ch){const dist=getStat('ninja','teleportDist')||100;if(getStat('ninja','shadowClone'))ninjaClone={x:player.x,y:player.y,life:1,decay:.012};player.x+=dist;ftxt('BLINK!',player.x+PW/2,player.y-22,ch.color,18);burst(14,ch.color);}
-function doStorm(ch){stormOn=true;obs.forEach(o=>o.frozen=true);ftxt('THUNDER!',player.x+PW/2,player.y-22,ch.color,16);burst(20,ch.color);shake.pw=6;}
-function doSpecter(ch){specShrunk=true;ftxt('SHRINK!',player.x+PW/2,player.y-22,ch.color,18);burst(12,ch.color);}
-function doMech(ch){
-  player.vy=8;const rad=(getStat('mech','stompR')||1)*80,bon=getStat('mech','stompB')||30;let cl=0;
-  obs=obs.filter(o=>{const d=Math.hypot((o.x+o.w/2)-(player.x+PW/2),(o.y+o.h/2)-(player.y+PH/2));if(d<rad){cl++;return false;}return true;});
-  if(cl>0){score+=cl*bon;ftxt(`STOMP! +${cl*bon}`,player.x+PW/2,player.y-22,ch.color,15);}
-  burst(24,ch.color);shake.pw=12;
-}
-function doBubble(ch){bubbleOn=true;bubbleHits=getStat('bubble','bubbleHits')||2;ftxt(`🫧 ×${bubbleHits}`,player.x+PW/2,player.y-22,ch.color,18);}
-function burst(n,col){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*5+2;addP(player.x+PW/2,player.y+PH/2,Math.cos(a)*sp,Math.sin(a)*sp,Math.random()*6+2,col,.035);}}
+
+// Phoenix rebirth (passive)
 function checkPhxRevive(){
   if(SD.selChar!=='phoenix'||phxLeft<=0)return false;
   phxLeft--;player.dead=false;player.vy=-10;player.jumpsLeft=2;shake.pw=10;sfxRevive();
@@ -1542,15 +1528,18 @@ function checkPhxRevive(){
   return true;
 }
 
+// Particle burst effect  
+function burst(n,col){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*5+2;addP(player.x+PW/2,player.y+PH/2,Math.cos(a)*sp,Math.sin(a)*sp,Math.random()*6+2,col,.035);}}
+
 // ── Game Init ─────────────────────────────────────────────
 function initGame(){
-  score=0;dScore=0;coinsRun=0;gemsRun=0;xpRun=0;bestComboRun=0;abilsUsedRun=0;
+  score=0;dScore=0;coinsRun=0;gemsRun=0;xpRun=0;bestComboRun=0;
   gSpeed=BS;elapsed=0;combo=0;comboT=0;bgH=0;bgHT=0;msIdx=0;rwH=0;
   parts=[];ftxts=[];shake={x:0,y:0,pw:0};
-  abilCD=0;abilActive=false;abilTimer=0;abilMaxDur=1;
   slowOn=false;slowMult=1;shieldHits=0;shieldOn=false;coinMult=1;
   ninjaClone=null;stormOn=false;specShrunk=false;bubbleOn=false;bubbleHits=0;
   scoreMult=1;scoreMultT=0;gemFinder=false;
+  player.vortexMode=false;player.chronoMode=false;player.apexMode=false;
   $('afl').style.opacity='0';$('ari').classList.remove('show');$('slov').style.opacity='0';
   $('msb').className='';
   taTimer=MODES.timeatk.timeLimit*60;
@@ -1565,9 +1554,10 @@ function initGame(){
   runPUs=[];
   // Apply upgrade bonuses: each upgrade level gives 1 extra shield hit (extra life)
   const upgradeLevel=upgLv(SD.selChar);
-  if(upgradeLevel>0){
+  if(upgradeLevel>0&&SD.selChar!=='phoenix'){
     shieldOn=true;
-    shieldHits+=upgradeLevel;
+    shieldHits=Math.max(shieldHits,0)+upgradeLevel;
+    if(shieldHits>0)ftxt(`🛡️ SHIELD ×${shieldHits}`,PX+PW/2,GY-PH-30,CHARS[SD.selChar].glow,14);
   }
   initBG();
   const exJ=getStat(SD.selChar,'extraJumps')||0;
@@ -1583,6 +1573,7 @@ function initGame(){
   for(let i=0;i<12;i++){const pw=ri(200,380);plats.push({x:px2,y:GY,w:pw,h:PLH});px2+=pw+ri(30,80);}
   obs=[];for(let i=0;i<6;i++)spawnObs(W+200+i*280);
   refreshCurrency();
+  setupTraits();
 }
 
 // ── Background System ─────────────────────────────────────
@@ -1823,14 +1814,11 @@ function update(ts){
   shake.pw*=.83;shake.x=(Math.random()-.5)*shake.pw;shake.y=(Math.random()-.5)*shake.pw;
   if(comboT>0){comboT-=dt;if(comboT<=0)resetCombo();}
   bgH+=(bgHT-bgH)*.06*dt;rwH+=2.5*dt;
-  // Ability timer
-  if(abilActive&&abilTimer>0){abilTimer-=dt;if(abilTimer<=0)endAbility();}
   // Ghost phase
   if(player.ghostT>0)player.ghostT-=dt;else player.ghosted=false;
   if(ninjaClone){ninjaClone.life-=ninjaClone.decay;if(ninjaClone.life<=0)ninjaClone=null;}
-  updateAbilHUD(dt);
-  // Dasher frenzy: auto-dash every 1s during ability
-  if(player.dashFrenzy&&abilActive){
+  // Dasher trait: auto-dash every 1s
+  if(player.dashFrenzy&&SD.selChar==='dasher'){
     player.dashFrenzyT-=dt;
     if(player.dashFrenzyT<=0){
       player.dashing=true;player.dashT=DDR*(getStat('dasher','dashDur')||1);
@@ -1838,7 +1826,7 @@ function update(ts){
       if(!player.onGround)player.vy=Math.min(player.vy,-1.5);
       spawnDashBurst();player.dashFrenzyT=60;
     }
-  }else if(!abilActive){player.dashFrenzy=false;}
+  }
   // Physics
   const ch=CHARS[SD.selChar];
   const wasG=player.onGround;
@@ -1919,7 +1907,7 @@ function draw(){
   // Ninja clone
   if(ninjaClone){ctx.save();ctx.globalAlpha=ninjaClone.life*.35;ctx.fillStyle='#4444aa';ctx.shadowColor='#8888ff';ctx.shadowBlur=10;rrc(ctx,ninjaClone.x,ninjaClone.y,PW,PH,6);ctx.fill();ctx.shadowBlur=0;ctx.restore();}
   // Ability aura visuals
-  if(SD.selChar==='magnet'&&abilActive){ctx.save();ctx.globalAlpha=.1+Math.sin(Date.now()/200)*.05;ctx.strokeStyle='#ff44aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,55+Math.sin(Date.now()/300)*8,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=.05;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,80,0,Math.PI*2);ctx.stroke();ctx.restore();}
+  if(SD.selChar==='magnet'){ctx.save();ctx.globalAlpha=.1+Math.sin(Date.now()/200)*.05;ctx.strokeStyle='#ff44aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,55+Math.sin(Date.now()/300)*8,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=.05;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,80,0,Math.PI*2);ctx.stroke();ctx.restore();}
   if(shieldOn){ctx.save();ctx.globalAlpha=.18+Math.sin(Date.now()/300)*.08;ctx.strokeStyle='#66aaff';ctx.lineWidth=3;ctx.shadowColor='#66aaff';ctx.shadowBlur=14;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,26,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.restore();}
   if(bubbleOn){ctx.save();ctx.globalAlpha=.15+Math.sin(Date.now()/400)*.07;ctx.strokeStyle='#88eeff';ctx.lineWidth=3;ctx.shadowColor='#88eeff';ctx.shadowBlur=16;ctx.beginPath();ctx.arc(player.x+PW/2,player.y+PH/2,28,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.restore();}
   if(stormOn){ctx.save();ctx.globalAlpha=.04;ctx.fillStyle='#ccddff';ctx.fillRect(0,0,W,GY);ctx.restore();}
@@ -1963,7 +1951,6 @@ function drawPlayer(){
   if(sk==='neon')ctx.shadowBlur+=16;
   if(sk==='gold'){ctx.shadowColor='#ffcc00';ctx.shadowBlur=24;}
   if(sk==='aurora'){ctx.shadowColor=col;ctx.shadowBlur=28;}
-  if(abilActive&&!player.dashing)ctx.shadowBlur+=8;
   ctx.fillStyle=col;
   const ha=sh2/2,wa=sw/2;
   if(ch.shape==='diamond'){ctx.beginPath();ctx.moveTo(0,-ha);ctx.lineTo(wa,0);ctx.lineTo(0,ha);ctx.lineTo(-wa,0);ctx.closePath();ctx.fill();}
