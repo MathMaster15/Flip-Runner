@@ -40,6 +40,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   user-select:none;
   transition:transform .07s,box-shadow .07s,filter .07s;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  min-height:40px;
 }
 /* Primary green */
 .btn.p{background:linear-gradient(150deg,#00f5a0,#00cc80);color:#021a0e;font-size:11px;padding:12px 26px;box-shadow:0 4px 0 #008855,0 6px 18px rgba(0,245,160,.28);}
@@ -62,6 +63,11 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 .btn.d:active{transform:translateY(3px);box-shadow:0 1px 0 #880020;}
 /* Tiny */
 .btn.t{font-size:8px;padding:5px 10px;border-radius:6px;letter-spacing:1px;}
+.pressable{touch-action:manipulation;}
+.pressing{filter:brightness(.97);}
+.btn.pressing{transform:translateY(3px);}
+.mdc.pressing,.si.pressing{transform:translateY(1px) scale(.985);}
+.shtab.pressing{color:var(--tx);border-bottom-color:rgba(0,245,160,.45);}
 
 /* ══ SCREENS ══ */
 .scr{
@@ -430,7 +436,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   <div id="mstr"></div>
   <div class="sr">
     <button class="btn p" id="bplay" style="font-size:10px;padding:11px 24px;">▶ Play</button>
-    <button class="btn s" id="bmode">🎮 Mode</button>
+    <!-- <button class="btn s" id="bmode">🎮 Mode</button> -->
     <button class="btn s" id="bshop">🛒 Shop</button>
   </div>
   <div class="sr">
@@ -444,7 +450,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   </div>
 </div>
 
-<!-- ► MODE SELECT -->
+<!-- ► MODE SELECT
 <div class="scr H" id="mods">
   <div class="tey" style="font-size:9px;letter-spacing:6px;">Select Mode</div>
   <div class="mdgr">
@@ -457,7 +463,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
     <button class="btn p" id="bmodok" style="font-size:10px;padding:10px 26px;">✓ Confirm</button>
     <button class="btn s" id="bmodbk">← Back</button>
   </div>
-</div>
+</div> -->
 
 <!-- ► SHOP -->
 <div class="scr H" id="shs" style="justify-content:flex-start;gap:0;">
@@ -824,14 +830,20 @@ const ALL_SCREENS=['ss','mods','shs','pas','mis','achs','gos'];
 function showScreen(id){
   ALL_SCREENS.forEach(s=>{
     const el=$(s);
-    if(!el)return;
-    if(s===id)el.classList.remove('H');
-    else el.classList.add('H');
+    if(el){
+      if(s===id){el.classList.remove('H');el.style.pointerEvents='all';}
+      else{el.classList.add('H');el.style.pointerEvents='none';}
+    }
   });
 }
 function showMenu(){
+  gState='menu';
   showScreen('ss');
   updateCharBadge();renderMissionStripe();refreshCurrency();
+}
+function syncModeSelection(mode){
+  curMode=mode||SD.gameMode||'endless';
+  document.querySelectorAll('.mdc').forEach(c=>c.classList.toggle('SEL',c.dataset.mode===curMode));
 }
 function hideAllGameHUD(){
   ['top-hud','spw','jd','ah','combo','mab','mbadge'].forEach(id=>{
@@ -877,9 +889,12 @@ function addGems(n){SD.gems+=n;refreshCurrency();}
 function spendGems(n){if(SD.gems<n)return false;SD.gems-=n;refreshCurrency();return true;}
 function refreshCurrency(){
   const c=SD.coins,g=SD.gems;
-  $('hud-coins').textContent=c;$('hud-gems').textContent=g;
-  $('menu-coins').textContent=c;$('menu-gems').textContent=g;
-  $('shop-coins').textContent=c;$('shop-gems').textContent=g;
+  const hc=$('hud-coins');if(hc)hc.textContent=c;
+  const hg=$('hud-gems');if(hg)hg.textContent=g;
+  const mc=$('menu-coins');if(mc)mc.textContent=c;
+  const mg=$('menu-gems');if(mg)mg.textContent=g;
+  const sc=$('shop-coins');if(sc)sc.textContent=c;
+  const sg=$('shop-gems');if(sg)sg.textContent=g;
 }
 
 // ── Upgrade Helpers ───────────────────────────────────────
@@ -924,8 +939,9 @@ function renderPassUI(){
   const nxt=PASS.find(t=>t.lv===SD.passLevel+1);
   const xpBase=cur.xp,xpNext=nxt?nxt.xp:cur.xp+9999;
   const pct=nxt?Math.min(100,(SD.passXP-xpBase)/(xpNext-xpBase)*100):100;
-  pxpcEl.textContent=SD.passXP;pxpnEl.textContent=xpNext;
-  pbarEl.style.width=pct+'%';
+  if(pxpcEl)pxpcEl.textContent=SD.passXP;
+  if(pxpnEl)pxpnEl.textContent=xpNext;
+  if(pbarEl)pbarEl.style.width=pct+'%';
   // Tier list
   const tiersEl=$('ptiers');if(!tiersEl)return;tiersEl.innerHTML='';
   PASS.forEach(tier=>{
@@ -942,10 +958,13 @@ function renderPassUI(){
         <div class="pnm">${tier.name}</div>
         <div class="pds">${rewDesc}</div>
       </div>
-      ${unlocked&&!claimed?`<button class="btn g t" onclick="claimPassTier(${tier.lv})">Claim</button>`:''}
+      ${unlocked&&!claimed?`<button class="btn g t" data-pass-claim="${tier.lv}">Claim</button>`:''}
       ${claimed?'<div class="pck">✓</div>':''}
       ${!unlocked?`<div class="pxp">${tier.xp} XP</div>`:''}`;
     tiersEl.appendChild(div);
+    // Bind pass claim button
+    const btn=div.querySelector('[data-pass-claim]');
+    if(btn)bindPressable(btn,()=>claimPassTier(tier.lv));
   });
 }
 function rewDescStr(r){
@@ -994,10 +1013,13 @@ function updateMission(stat,amount){
   renderMissionStripe();
 }
 function renderMissionStripe(){
-  const el=$('mstr');if(!el)return;el.innerHTML='';
-  if(!SD.missions)return;
+  const el=$('mstr');
+  if(!el)return;
+  el.innerHTML='';
+  if(!SD.missions||Object.keys(SD.missions).length===0)return;
   Object.keys(SD.missions).forEach(id=>{
-    const ms=SD.missions[id],def=MPOOL.find(p=>p.id===id);if(!def)return;
+    const ms=SD.missions[id],def=MPOOL.find(p=>p.id===id);
+    if(!def)return;
     const pct=Math.min(100,((ms.prog||0)/def.need)*100);
     const div=document.createElement('div');div.className='mpx';
     const rewStr=def.rew.coins?`🪙${def.rew.coins}`:`💎${def.rew.gems}`;
@@ -1035,11 +1057,14 @@ function renderMissionsScreen(){
         <div class="mcpw"><div class="mcpb" style="width:${pct}%"></div></div>
         <div class="mcbot">
           <div class="mcpct">${prog} / ${need}</div>
-          ${done&&!claimed?`<button class="btn g t" onclick="claimMission('${id}')">Claim!</button>`:''}
+          ${done&&!claimed?`<button class="btn g t" data-mission-claim="${id}">Claim!</button>`:''}
           ${claimed?'<div style="font-size:9px;color:var(--pr);letter-spacing:2px;text-transform:uppercase;">✓ Claimed</div>':''}
         </div>
       </div>`;
     body.appendChild(card);
+    // Bind claim button
+    const btn=card.querySelector('[data-mission-claim]');
+    if(btn)bindPressable(btn,()=>claimMission(id));
   });
 }
 // ✅ FIXED: Mission claim only awards reward when mission is COMPLETED
@@ -1141,27 +1166,67 @@ function toast(msg){
 
 // ══════════════════════════════════════════════════════════
 //  BUTTON SYSTEM — Unified, reliable, mobile+desktop
-//  Uses 'click' event (most compatible) with pointer fallback
+//  Single activation path prevents click/touch double-fires
 // ══════════════════════════════════════════════════════════
-function wire(id,fn){
-  const el=$(id);if(!el)return;
-  // Primary: click (works everywhere)
-  el.addEventListener('click',e=>{
-    e.preventDefault();e.stopPropagation();
-    initAudio();sfxClick();fn();
-  });
-  // Backup: touchend for very fast mobile response
-  el.addEventListener('touchend',e=>{
-    e.preventDefault();e.stopPropagation();
-    initAudio();sfxClick();fn();
+function inBounds(el,x,y){
+  const r=el.getBoundingClientRect();
+  // Expanded hitbox: +8px margin for easier mobile clicking
+  return x>=r.left-8&&x<=r.right+8&&y>=r.top-8&&y<=r.bottom+8;
+}
+function bindPressable(el,fn,opt){
+  if(!el||el.dataset.boundPressable)return;
+  el.dataset.boundPressable='1';
+  el.classList.add('pressable');
+  const cfg=Object.assign({sound:true,preventDefault:true,stopPropagation:true},opt||{});
+  let activeId=null,lastFire=0;
+  const fire=e=>{
+    const now=performance.now();
+    // More lenient debounce: 200ms instead of 320ms
+    if(now-lastFire<200)return;
+    lastFire=now;
+    if(cfg.preventDefault&&e?.preventDefault)e.preventDefault();
+    if(cfg.stopPropagation&&e?.stopPropagation)e.stopPropagation();
+    initAudio();
+    if(cfg.sound)sfxClick();
+    fn(e);
+  };
+  const clear=()=>{activeId=null;el.classList.remove('pressing');};
+  el.addEventListener('pointerdown',e=>{
+    if(e.button!=null&&e.button!==0)return;
+    if(cfg.preventDefault)e.preventDefault();
+    if(cfg.stopPropagation)e.stopPropagation();
+    activeId=e.pointerId;el.classList.add('pressing');
+    if(el.setPointerCapture){try{el.setPointerCapture(e.pointerId);}catch(_e){}}
   },{passive:false});
+  el.addEventListener('pointerup',e=>{
+    if(activeId!==e.pointerId)return;
+    const hit=inBounds(el,e.clientX,e.clientY);
+    clear();
+    if(hit)fire(e);
+  },{passive:false});
+  el.addEventListener('pointercancel',clear);
+  el.addEventListener('pointerleave',e=>{if(activeId===e.pointerId)el.classList.remove('pressing');});
+  el.addEventListener('click',e=>{
+    // Don't fire if already fired by pointerup
+    if(performance.now()-lastFire<200){
+      if(cfg.preventDefault)e.preventDefault();
+      if(cfg.stopPropagation)e.stopPropagation();
+      return;
+    }
+    fire(e);
+  },{passive:false});
+}
+function wire(id,fn,opt){
+  const el=$(id);
+  if(el)bindPressable(el,fn,opt);
+  else console.warn(`Element not found: ${id}`);
 }
 
 // ── Wire all buttons at DOM ready ─────────────────────────
 // START SCREEN
 wire('bplay', ()=>startGame());
-wire('bmode', ()=>{showScreen('mods');}); // ✅ FIXED: Opens mode screen, not game
-wire('bshop', ()=>openShop());
+wire('bmode', ()=>{syncModeSelection(SD.gameMode||curMode);showScreen('mods');gState='menu';}); // ✅ FIXED: Opens mode screen, not game
+wire('bshop', ()=>{lastTap=0;openShop();});
 wire('bpass', ()=>openPass());            // ✅ FIXED: Opens Runner Pass screen
 wire('bmis',  ()=>openMissions());        // ✅ FIXED: Opens missions screen
 wire('bach',  ()=>openAchiev());
@@ -1205,27 +1270,29 @@ wire('bcrclm', ()=>{
 
 // Mode cards
 document.querySelectorAll('.mdc').forEach(c=>{
-  c.addEventListener('click',e=>{
-    e.preventDefault();e.stopPropagation();initAudio();sfxClick();
+  bindPressable(c,()=>{
     document.querySelectorAll('.mdc').forEach(x=>x.classList.remove('SEL'));
     c.classList.add('SEL');curMode=c.dataset.mode;
   });
-  c.addEventListener('touchend',e=>{
-    e.preventDefault();e.stopPropagation();initAudio();sfxClick();
-    document.querySelectorAll('.mdc').forEach(x=>x.classList.remove('SEL'));
-    c.classList.add('SEL');curMode=c.dataset.mode;
-  },{passive:false});
 });
 
 // Shop tabs
 document.querySelectorAll('.shtab').forEach(t=>{
-  t.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();sfxClick();switchShopTab(t.dataset.tab);});
-  t.addEventListener('touchend',e=>{e.preventDefault();e.stopPropagation();sfxClick();switchShopTab(t.dataset.tab);},{passive:false});
+  bindPressable(t,()=>switchShopTab(t.dataset.tab));
 });
 
 // Mobile ability button
 const mabEl=$('mab');
-mabEl.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();initAudio();activateAbility();},{passive:false});
+if(mabEl){
+  mabEl.addEventListener('pointerdown',e=>{
+    e.preventDefault();e.stopPropagation();
+    mabEl.classList.add('pressing');
+    initAudio();activateAbility();
+  },{passive:false});
+  mabEl.addEventListener('pointerup',()=>{mabEl.classList.remove('pressing');});
+  mabEl.addEventListener('pointercancel',()=>{mabEl.classList.remove('pressing');});
+  mabEl.addEventListener('touchstart',e=>{e.preventDefault();},{passive:false});
+}else console.warn('Mobile ability button (#mab) not found');
 
 // Keyboard
 document.addEventListener('keydown',e=>{
@@ -1234,21 +1301,47 @@ document.addEventListener('keydown',e=>{
   if(e.code==='Escape'&&gState!=='play'&&gState!=='menu'){showMenu();}
 });
 
-// Canvas tap — jump / double-tap = ability
-let lastTap=0;
-C.addEventListener('pointerdown',e=>{
+// Gameplay tap surface — jump anywhere during play, double-tap = ability
+let lastTap=0,tapTimeout=null;
+function handleGameplayTap(e){
   e.preventDefault();initAudio();
   if(gState!=='play')return;
+  const hitUI=e.target.closest('.pressable,button,.shtab,.si,.mdc,#mab,.dlbox,.crbox');
+  if(hitUI)return;
   const now=performance.now();
-  if(now-lastTap<260){activateAbility();lastTap=0;}
-  else{lastTap=now;tryJump();}
-},{passive:false});
+  const tapGap=now-lastTap;
+  
+  // Clear previous tap timeout
+  if(tapTimeout){clearTimeout(tapTimeout);tapTimeout=null;}
+  
+  if(tapGap<280){
+    // Double-tap detected — activate ability
+    lastTap=0;
+    activateAbility();
+  }else{
+    // Single tap — jump
+    lastTap=now;
+    tryJump();
+    // Set timeout to clear the tap if no second tap comes
+    tapTimeout=setTimeout(()=>{lastTap=0;tapTimeout=null;},280);
+  }
+}
+const W_el=$('W');
+if(W_el){W_el.addEventListener('pointerdown',handleGameplayTap,{passive:false});}
+else console.warn('Main window element (#W) not found');
 
 // ── Screen Opening Functions ───────────────────────────────
-function openShop(){showScreen('shs');refreshCurrency();renderShopTab('chars');}
-function openPass(){showScreen('pas');renderPassUI();}
-function openMissions(){showScreen('mis');renderMissionsScreen();}
-function openAchiev(){showScreen('achs');renderAchievements();}
+function openShop(){
+  gState='shop';
+  lastTap=0;
+  hideAllGameHUD();
+  showScreen('shs');
+  refreshCurrency();
+  switchShopTab(curTab||'chars');
+}
+function openPass(){gState='menu';showScreen('pas');renderPassUI();}
+function openMissions(){gState='menu';showScreen('mis');renderMissionsScreen();}
+function openAchiev(){gState='menu';showScreen('achs');renderAchievements();}
 function goToMenu(){stopBGM();hideAllGameHUD();showMenu();gState='menu';}
 
 // ── Game Start / Over ─────────────────────────────────────
@@ -1258,19 +1351,23 @@ function startGame(){
   // Hide all screens
   ALL_SCREENS.forEach(s=>{const el=$(s);if(el)el.classList.add('H');});
   // Show gameplay HUD
-  $('top-hud').classList.add('vis');
-  $('spw').classList.add('vis');
-  $('jd').classList.add('vis');
-  $('ah').classList.add('vis');
-  mabEl.classList.add('vis');
-  $('sc-hub').style.opacity='1';
+  const topHud=$('top-hud');if(topHud)topHud.classList.add('vis');
+  const spw=$('spw');if(spw)spw.classList.add('vis');
+  const jd=$('jd');if(jd)jd.classList.add('vis');
+  const ah=$('ah');if(ah)ah.classList.add('vis');
+  if(mabEl)mabEl.classList.add('vis');
+  const scHub=$('sc-hub');if(scHub)scHub.style.opacity='1';
   updateJumpDots();updateComboHUD();setupAbilHUD();
   // Mode badge
   const md=MODES[curMode];
   const mb=$('mbadge');
-  mb.textContent=md.icon+' '+md.name;
-  mb.style.background=md.col+'22';mb.style.border=`1px solid ${md.col}44`;mb.style.color=md.col;
-  mb.classList.add('vis');
+  if(mb){
+    mb.textContent=md.icon+' '+md.name;
+    mb.style.background=md.col+'22';
+    mb.style.border=`1px solid ${md.col}44`;
+    mb.style.color=md.col;
+    mb.classList.add('vis');
+  }
   startBGM();
 }
 function showGameOver(){
@@ -1300,53 +1397,81 @@ function showGameOver(){
   updateMission('coinsEarned',earnedCoins);
   checkAchievements();save();
   // Animate score counter
-  let c=0;const iv=setInterval(()=>{c=Math.min(c+Math.ceil(score/40),score);$('goSc').textContent=c;if(c>=score)clearInterval(iv);},22);
-  $('goBe').textContent=SD.hs;
-  $('goCo').textContent='+'+earnedCoins;
-  $('goGe').textContent=earnedGems>0?'+'+earnedGems:'0';
-  $('goXP').textContent='+'+xpRun+' XP';
-  $('goT').textContent=curMode==='timeatk'?'Time\'s Up!':'Game Over';
-  $('goML').textContent=MODES[curMode].icon+' '+MODES[curMode].name;
-  $('nrb').classList.toggle('show',isNew);
+  let c=0;const iv=setInterval(()=>{c=Math.min(c+Math.ceil(score/40),score);const goSc=$('goSc');if(goSc)goSc.textContent=c;if(c>=score)clearInterval(iv);},22);
+  const goBe=$('goBe');if(goBe)goBe.textContent=SD.hs;
+  const goCo=$('goCo');if(goCo)goCo.textContent='+'+earnedCoins;
+  const goGe=$('goGe');if(goGe)goGe.textContent=earnedGems>0?'+'+earnedGems:'0';
+  const goXP=$('goXP');if(goXP)goXP.textContent='+'+xpRun+' XP';
+  const goT=$('goT');if(goT)goT.textContent=curMode==='timeatk'?'Time\'s Up!':'Game Over';
+  const goML=$('goML');if(goML)goML.textContent=MODES[curMode].icon+' '+MODES[curMode].name;
+  const nrb=$('nrb');if(nrb)nrb.classList.toggle('show',isNew);
   hideAllGameHUD();
-  $('gos').classList.remove('H');sfxDeath();
+  const gos=$('gos');if(gos)gos.classList.remove('H');
+  sfxDeath();
 }
 
 // ── Char Badge ────────────────────────────────────────────
 function updateCharBadge(){
   const ch=CHARS[SD.selChar],lv=upgLv(SD.selChar);
-  $('cbdot').style.background=ch.color;$('cbdot').style.boxShadow=`0 0 10px ${ch.color}`;
-  $('cbnm').textContent=ch.name;$('cbab').textContent=ch.ability;
-  $('cblv').textContent=lv>0?`Lv${lv+1}`:'Lv1';
+  const cbd=$('cbdot'),cnm=$('cbnm'),cab=$('cbab'),clv=$('cblv');
+  if(cbd){cbd.style.background=ch.color;cbd.style.boxShadow=`0 0 10px ${ch.color}`;}
+  if(cnm)cnm.textContent=ch.name;
+  if(cab)cab.textContent=ch.ability;
+  if(clv)clv.textContent=lv>0?`Lv${lv+1}`:'Lv1';
 }
 
 // ── Ability HUD ───────────────────────────────────────────
 function setupAbilHUD(){
   const ch=CHARS[SD.selChar];
-  $('ai').textContent=AICONS[SD.selChar]||'⚡';
-  $('al').textContent=ch.ability;
-  $('acdb').style.background=ch.glow;
-  $('adb').style.background=ch.glow;
-  const st=$('ast');st.className='rdy';st.textContent='▶ READY';
-  $('adw').style.display='none';
-  mabEl.style.borderColor=ch.glow;mabEl.style.color=ch.glow;mabEl.style.boxShadow=`0 0 14px ${ch.glow}55`;
-  $('mai').textContent=AICONS[SD.selChar]||'⚡';$('mcd').textContent='READY';
-  mabEl.classList.add('rdy');
-  if(curMode==='zen'){$('ah').classList.remove('vis');mabEl.classList.remove('vis');}
+  const ai=$('ai'),al=$('al'),acdb=$('acdb'),adb=$('adb'),ast=$('ast'),adw=$('adw');
+  const mab=mabEl,mai=$('mai'),mcd=$('mcd');
+  
+  if(ai)ai.textContent=AICONS[SD.selChar]||'⚡';
+  if(al)al.textContent=ch.ability;
+  if(acdb)acdb.style.background=ch.glow;
+  if(adb)adb.style.background=ch.glow;
+  if(ast){ast.className='rdy';ast.textContent='▶ READY';}
+  if(adw)adw.style.display='none';
+  if(mab){
+    mab.style.borderColor=ch.glow;
+    mab.style.color=ch.glow;
+    mab.style.boxShadow=`0 0 14px ${ch.glow}55`;
+  }
+  if(mai)mai.textContent=AICONS[SD.selChar]||'⚡';
+  if(mcd)mcd.textContent='READY';
+  if(mab)mab.classList.add('rdy');
+  
+  if(curMode==='zen'){
+    const ah=$('ah');
+    if(ah)ah.classList.remove('vis');
+    if(mab)mab.classList.remove('vis');
+  }
 }
 function updateAbilHUD(dt){
   const cd=getCD(SD.selChar);
+  const adb=$('adb'),ast=$('ast'),acdb=$('acdb'),mcd=$('mcd');
+  
   if(abilActive&&abilTimer>0){
-    $('adb').style.width=Math.max(0,(abilTimer/abilMaxDur))*100+'%';
-    const st=$('ast');st.className='act';st.textContent=`⚡ ${Math.ceil(abilTimer/60)}s`;
-    $('mcd').textContent=Math.ceil(abilTimer/60)+'s';
+    if(adb)adb.style.width=Math.max(0,(abilTimer/abilMaxDur))*100+'%';
+    if(ast){ast.className='act';ast.textContent=`⚡ ${Math.ceil(abilTimer/60)}s`;}
+    if(mcd)mcd.textContent=Math.ceil(abilTimer/60)+'s';
   }else if(abilCD>0){
-    abilCD-=dt;$('acdb').style.width=Math.max(0,(1-abilCD/cd))*100+'%';
-    const st=$('ast'),sec=Math.ceil(abilCD/60);st.className='cd';st.textContent=sec+'s';$('mcd').textContent=sec+'s';
-    if(abilCD<=0){st.className='rdy';st.textContent='▶ READY';$('mcd').textContent='READY';mabEl.classList.add('rdy');}
+    abilCD-=dt;
+    if(acdb)acdb.style.width=Math.max(0,(1-abilCD/cd))*100+'%';
+    const sec=Math.ceil(abilCD/60);
+    if(ast){ast.className='cd';ast.textContent=sec+'s';}
+    if(mcd)mcd.textContent=sec+'s';
+    if(abilCD<=0){
+      if(ast){ast.className='rdy';ast.textContent='▶ READY';}
+      if(mcd)mcd.textContent='READY';
+      if(mabEl)mabEl.classList.add('rdy');
+    }
   }else{
-    $('acdb').style.width='100%';
-    if(!abilActive){$('ast').className='rdy';$('ast').textContent='▶ READY';mabEl.classList.add('rdy');}
+    if(acdb)acdb.style.width='100%';
+    if(!abilActive){
+      if(ast){ast.className='rdy';ast.textContent='▶ READY';}
+      if(mabEl)mabEl.classList.add('rdy');
+    }
   }
 }
 
@@ -1438,6 +1563,12 @@ function initGame(){
     if(p==='scoremult'){scoreMult=2;scoreMultT=20*60;}
   });
   runPUs=[];
+  // Apply upgrade bonuses: each upgrade level gives 1 extra shield hit (extra life)
+  const upgradeLevel=upgLv(SD.selChar);
+  if(upgradeLevel>0){
+    shieldOn=true;
+    shieldHits+=upgradeLevel;
+  }
   initBG();
   const exJ=getStat(SD.selChar,'extraJumps')||0;
   player={
@@ -1557,8 +1688,16 @@ function doJump2(){
 
 // ── Combo / Near Miss / Perfect ───────────────────────────
 function addCombo(){combo++;comboT=200;if(combo>bestComboRun)bestComboRun=combo;updateComboHUD();if(combo>=2)sfxCombo();}
-function resetCombo(){combo=0;comboT=0;$('combo').classList.remove('vis');}
-function updateComboHUD(){if(combo>=2){$('cov').textContent=`x${combo}`;$('combo').classList.add('vis');}else $('combo').classList.remove('vis');}
+function resetCombo(){combo=0;comboT=0;const combo_el=$('combo');if(combo_el)combo_el.classList.remove('vis');}
+function updateComboHUD(){
+  const combo_el=$('combo');
+  if(combo>=2&&combo_el){
+    $('cov').textContent=`x${combo}`;
+    combo_el.classList.add('vis');
+  }else if(combo_el){
+    combo_el.classList.remove('vis');
+  }
+}
 function cMul(){return combo>=10?3:combo>=5?2:combo>=2?1.5:1;}
 function checkNM(){
   const pcx=player.x+PW/2,pcy=player.y+PH/2;
@@ -1589,7 +1728,8 @@ function checkPJ(){
 }
 function earnCoins(n){
   const e=Math.round(n*coinMult);coinsRun+=e;
-  $('hud-coins').textContent=SD.coins+coinsRun;
+  const hc=$('hud-coins');
+  if(hc)hc.textContent=SD.coins+coinsRun;
   if(e>0){ftxt(`🪙+${e}`,player.x+PW/2,player.y-14,'#ffd700',11);sfxCoin();}
 }
 function checkMS(){
@@ -1637,9 +1777,11 @@ function skinFX(){
 }
 function ftxt(t,x,y,col,sz){ftxts.push({t,x,y,col,sz:sz||14,life:1});}
 function updateJumpDots(){
-  $('jd1').classList.toggle('u',player.jumpsLeft<1);
-  $('jd2').classList.toggle('u',player.jumpsLeft<2);
-  const d=player.jumpsLeft===1?$('jd2'):$('jd1');d.classList.remove('pu');void d.offsetWidth;d.classList.add('pu');
+  const jd1=$('jd1'),jd2=$('jd2');
+  if(jd1)jd1.classList.toggle('u',player.jumpsLeft<1);
+  if(jd2)jd2.classList.toggle('u',player.jumpsLeft<2);
+  const d=player.jumpsLeft===1?jd2:jd1;
+  if(d){d.classList.remove('pu');void d.offsetWidth;d.classList.add('pu');}
 }
 function getOR(o){return o.tp==='s'?{x:o.x+4,y:o.y+4,w:o.w-8,h:o.h-4}:{x:o.x,y:o.y,w:o.w,h:o.h};}
 function ro(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
@@ -1654,24 +1796,28 @@ function update(ts){
   const md=MODES[curMode];
   const maxSpd=MS*(md.maxSpdM||1);
   gSpeed=Math.min(BS+elapsed*SA*60,maxSpd);
-  $('spb').style.width=((gSpeed-BS)/(maxSpd-BS)*100)+'%';
+  const spb=$('spb');if(spb)spb.style.width=((gSpeed-BS)/(maxSpd-BS)*100)+'%';
   // Time attack mode countdown
   if(curMode==='timeatk'){
     taTimer-=dt;if(taTimer<=0){killPlayer();return;}
-    $('mbadge').textContent=`⏱️ ${Math.ceil(taTimer/60)}s`;
+    const mb=$('mbadge');if(mb)mb.textContent=`⏱️ ${Math.ceil(taTimer/60)}s`;
   }
   // Score multiplier timer
-  if(scoreMultT>0){scoreMultT-=dt;if(scoreMultT<=0){scoreMult=1;$('mult-h').style.display='none';}}
+  if(scoreMultT>0){scoreMultT-=dt;if(scoreMultT<=0){scoreMult=1;const mh=$('mult-h');if(mh)mh.style.display='none';}}
   // Score
   const raw=Math.floor(elapsed*gSpeed*2.5*scoreMult);
   if(raw>score){score=raw;checkMS();}
   dScore+=(score-dScore)*.14*dt;
   const di=Math.floor(dScore);
-  if($('sc-v').textContent!==String(di)){$('sc-v').textContent=di;if(di>0&&di%100===0){$('sc-v').classList.remove('pop');void $('sc-v').offsetWidth;$('sc-v').classList.add('pop');}}
+  const scv=$('sc-v');
+  if(scv&&scv.textContent!==String(di)){
+    scv.textContent=di;
+    if(di>0&&di%100===0){scv.classList.remove('pop');void scv.offsetWidth;scv.classList.add('pop');}
+  }
   // Passive coin earn
   if(Math.floor(elapsed)>Math.floor(elapsed-dt/60)){
     const e=Math.floor(gSpeed*.3*cMul());coinsRun+=e;
-    $('hud-coins').textContent=SD.coins+coinsRun;
+    const hc=$('hud-coins');if(hc)hc.textContent=SD.coins+coinsRun;
     if(gemFinder&&Math.floor(elapsed)%8===0)gemsRun++;
   }
   shake.pw*=.83;shake.x=(Math.random()-.5)*shake.pw;shake.y=(Math.random()-.5)*shake.pw;
@@ -1848,8 +1994,28 @@ function switchShopTab(tab){
   curTab=tab;
   document.querySelectorAll('.shtab').forEach(t=>t.classList.toggle('on',t.dataset.tab===tab));
   renderShopTab(tab);
+  // Re-bind all newly created shop items
+  setTimeout(()=>{
+    document.querySelectorAll('.si').forEach(item=>{
+      if(!item.dataset.boundPressable){
+        const type=item.dataset.shopType;
+        const id=item.dataset.shopId;
+        const price=parseInt(item.dataset.price);
+        const cur=item.dataset.cur;
+        if(type&&id)bindPressable(item,()=>shopClick(type,id,price,cur,item));
+      }
+    });
+  },50);
 }
-function renderShopTab(tab){$('shbody').innerHTML='';if(tab==='chars')renderChars();else if(tab==='skins')renderSkins();else if(tab==='bgs')renderBgs();else if(tab==='pups')renderPups();}
+function renderShopTab(tab){
+  const shbody=$('shbody');
+  if(!shbody)return;
+  shbody.innerHTML='';
+  if(tab==='chars')renderChars();
+  else if(tab==='skins')renderSkins();
+  else if(tab==='bgs')renderBgs();
+  else if(tab==='pups')renderPups();
+}
 // Price badge HTML
 function pBadge(owned,sel,price,cur){
   const iG=cur==='gems',has=iG?SD.gems>=price:SD.coins>=price;
@@ -1869,19 +2035,22 @@ function renderChars(){
     const has=ch.cur==='gems'?SD.gems>=ch.price:SD.coins>=ch.price;
     const item=document.createElement('div');
     item.className='si'+(sel?' SEL':'')+((!owned)?' LK':'')+((!owned&&has)?' AFF':'');
+    const bonusHits=lv>0?`<div style="font-size:7px;color:var(--go);margin-top:2px;letter-spacing:0.5px;">🛡️ +${lv} Life${lv>1?'s':''}</div>`:'';
     item.innerHTML=`<div class="rar ${rarCls(ch.rarity)}">${rarNm(ch.rarity)}</div>
       <canvas width="54" height="64" id="cp${ch.id}"></canvas>
       <div class="sinm">${ch.name}</div>
       <div class="sisb">${ch.ability}${owned?` · Lv${lv+1}`:''}</div>
+      ${bonusHits}
       <div class="sipw">${pBadge(owned,sel,ch.price,ch.cur)}</div>`;
-    item.addEventListener('click',e=>{e.stopPropagation();sfxClick();shopClick('char',ch.id,ch.price,ch.cur,item);});
+    bindPressable(item,()=>shopClick('char',ch.id,ch.price,ch.cur,item));
     gr.appendChild(item);
     setTimeout(()=>drawChPrev(ch,document.getElementById('cp'+ch.id)),0);
     if(owned){
       const ml=ch.upgrades.length,cl=lv;
       const upg=document.createElement('div');upg.className='upl';
+      let uc=0,nu=null;
       if(cl<ml){
-        const uc=ch.pUpg[cl],nu=ch.upgrades[cl];const ua=SD.coins>=uc;
+        uc=ch.pUpg[cl];nu=ch.upgrades[cl];const ua=SD.coins>=uc;
         upg.innerHTML=`<div class="upt">Upgrade ${ch.name}</div>
           <div class="upr">
             <div class="uplv" style="color:${ch.color}">Lv${cl+1}</div>
@@ -1889,20 +2058,46 @@ function renderChars(){
             <div class="uplv" style="color:${ch.color};opacity:.3">Lv${ml+1}</div>
           </div>
           <div class="upfx">${nu.name}: ${nu.desc}</div>
+          <div class="upfx" style="color:var(--pr);font-size:8px;margin-top:6px;">✦ BONUS: +1 Extra Life (Shield Hit)</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
             <div class="ptag ${ua?'pt-c':'pt-n'}"><span style="font-size:10px">🪙</span><span class="pn ${ua?'gc':'rd'}">${uc}</span></div>
-            <button class="btn g t" onclick="upChar('${ch.id}',${uc})">Upgrade</button>
+            <button class="btn g t" data-upgrade-char="${ch.id}" data-upgrade-cost="${uc}">Upgrade</button>
           </div>`;
-      }else upg.innerHTML=`<div class="upt">✦ Max Level</div><div class="upfx" style="color:var(--pr)">Fully upgraded!</div>`;
+      }else{
+        const totalBonusHits=cl;
+        upg.innerHTML=`<div class="upt">✦ Max Level</div>
+          <div class="upfx" style="color:var(--pr)">Fully upgraded!</div>
+          <div class="upfx" style="color:var(--go);font-size:9px;margin-top:6px;">🛡️ +${totalBonusHits} Extra Lives (Shield Hits) per run</div>`;
+      }
       gr.appendChild(upg);
+      const upBtn=upg.querySelector('[data-upgrade-char]');
+      if(upBtn){
+        bindPressable(upBtn,()=>{
+          upChar(ch.id,uc,upBtn);
+        });
+      }
     }
   });
   $('shbody').appendChild(gr);
 }
-function upChar(id,cost){
-  if(!spendCoins(cost)){shkEl(document.querySelector('.upl'));tone(200,'sawtooth',.15,.07,80);return;}
-  if(!SD.upgrades[id])SD.upgrades[id]=0;SD.upgrades[id]++;
-  save();sfxUpg();renderShopTab('chars');toast('Upgraded!');
+function upChar(id,cost,btn){
+  // Ensure cost is a valid number
+  const numCost=parseInt(cost);
+  if(isNaN(numCost)||numCost<=0){
+    toast('Invalid upgrade cost!');return;
+  }
+  if(!spendCoins(numCost)){
+    shkEl(btn?.closest('.upl')||document.querySelector('.upl'));
+    tone(200,'sawtooth',.15,.07,80);
+    toast('Not enough coins! Need '+numCost+'🪙');
+    return;
+  }
+  if(!SD.upgrades[id])SD.upgrades[id]=0;
+  SD.upgrades[id]++;
+  const newLv=SD.upgrades[id];
+  save();sfxUpg();
+  setTimeout(()=>renderShopTab('chars'),200);
+  toast(`Upgraded to Lv${newLv+1}! +1 Extra Life! 🛡️`);
 }
 function shkEl(el){if(!el)return;el.style.animation='shk .3s ease';setTimeout(()=>el.style.animation='',400);}
 
@@ -1928,7 +2123,7 @@ function renderSkins(){
       <div class="sinm">${sk.name}</div>
       <div class="sisb">${sk.desc}</div>
       <div class="sipw">${pBadge(owned,sel,sk.price,sk.cur)}</div>`;
-    item.addEventListener('click',e=>{e.stopPropagation();sfxClick();shopClick('skin',sk.id,sk.price,sk.cur,item);});
+    bindPressable(item,()=>shopClick('skin',sk.id,sk.price,sk.cur,item));
     gr.appendChild(item);
   });
   $('shbody').appendChild(gr);
@@ -1945,7 +2140,7 @@ function renderBgs(){
       <div class="sinm">${bg.name}</div>
       <div class="sisb">${bg.desc}</div>
       <div class="sipw">${pBadge(owned,sel,bg.price,bg.cur)}</div>`;
-    item.addEventListener('click',e=>{e.stopPropagation();sfxClick();shopClick('bg',bg.id,bg.price,bg.cur,item);});
+    bindPressable(item,()=>shopClick('bg',bg.id,bg.price,bg.cur,item));
     gr.appendChild(item);
   });
   $('shbody').appendChild(gr);
@@ -1965,7 +2160,7 @@ function renderPups(){
       <div class="sinm">${pu.name}</div>
       <div class="sisb">${pu.desc}</div>
       <div class="sipw">${pBadge(false,false,pu.price,pu.cur)}</div>`;
-    item.addEventListener('click',e=>{e.stopPropagation();sfxClick();buyPU(pu,item);});
+    bindPressable(item,()=>buyPU(pu,item));
     gr.appendChild(item);
   });
   $('shbody').appendChild(gr);
