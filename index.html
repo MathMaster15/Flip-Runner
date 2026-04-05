@@ -41,6 +41,8 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   transition:transform .07s,box-shadow .07s,filter .07s;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
   min-height:40px;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
 }
 /* Primary green */
 .btn.p{background:linear-gradient(150deg,#00f5a0,#00cc80);color:#021a0e;font-size:11px;padding:12px 26px;box-shadow:0 4px 0 #008855,0 6px 18px rgba(0,245,160,.28);}
@@ -1190,19 +1192,20 @@ function toast(msg){
 // ══════════════════════════════════════════════════════════
 function inBounds(el,x,y){
   const r=el.getBoundingClientRect();
-  // Expanded hitbox: +8px margin for easier mobile clicking
-  return x>=r.left-8&&x<=r.right+8&&y>=r.top-8&&y<=r.bottom+8;
+  // Expanded hitbox for mobile: +12px margin (up from +8px) for easier tap targeting
+  const margin=el.classList.contains('btn')?12:8;
+  return x>=r.left-margin&&x<=r.right+margin&&y>=r.top-margin&&y<=r.bottom+margin;
 }
 function bindPressable(el,fn,opt){
   if(!el||el.dataset.boundPressable)return;
   el.dataset.boundPressable='1';
   el.classList.add('pressable');
   const cfg=Object.assign({sound:true,preventDefault:true,stopPropagation:true},opt||{});
-  let activeId=null,lastFire=0;
+  let activeId=null,lastFire=0,pointerStartTime=0;
   const fire=e=>{
     const now=performance.now();
-    // More lenient debounce: 200ms instead of 320ms
-    if(now-lastFire<200)return;
+    // More lenient debounce for mobile: 150ms (down from 200ms)
+    if(now-lastFire<150)return;
     lastFire=now;
     if(cfg.preventDefault&&e?.preventDefault)e.preventDefault();
     if(cfg.stopPropagation&&e?.stopPropagation)e.stopPropagation();
@@ -1210,12 +1213,14 @@ function bindPressable(el,fn,opt){
     if(cfg.sound)sfxClick();
     fn(e);
   };
-  const clear=()=>{activeId=null;el.classList.remove('pressing');};
+  const clear=()=>{activeId=null;el.classList.remove('pressing');pointerStartTime=0;};
   el.addEventListener('pointerdown',e=>{
     if(e.button!=null&&e.button!==0)return;
     if(cfg.preventDefault)e.preventDefault();
     if(cfg.stopPropagation)e.stopPropagation();
-    activeId=e.pointerId;el.classList.add('pressing');
+    activeId=e.pointerId;
+    pointerStartTime=performance.now();
+    el.classList.add('pressing');
     if(el.setPointerCapture){try{el.setPointerCapture(e.pointerId);}catch(_e){}}
   },{passive:false});
   el.addEventListener('pointerup',e=>{
@@ -1228,12 +1233,23 @@ function bindPressable(el,fn,opt){
   el.addEventListener('pointerleave',e=>{if(activeId===e.pointerId)el.classList.remove('pressing');});
   el.addEventListener('click',e=>{
     // Don't fire if already fired by pointerup
-    if(performance.now()-lastFire<200){
+    if(performance.now()-lastFire<150){
       if(cfg.preventDefault)e.preventDefault();
       if(cfg.stopPropagation)e.stopPropagation();
       return;
     }
     fire(e);
+  },{passive:false});
+  // Enhanced touch support
+  el.addEventListener('touchend',e=>{
+    if(!activeId)return;
+    if(cfg.preventDefault)e.preventDefault();
+    if(cfg.stopPropagation)e.stopPropagation();
+    const touch=e.changedTouches[0];
+    if(touch&&inBounds(el,touch.clientX,touch.clientY)){
+      fire(e);
+    }
+    clear();
   },{passive:false});
 }
 function wire(id,fn,opt){
@@ -1305,29 +1321,73 @@ document.querySelectorAll('.shtab').forEach(t=>{
 
 // Keyboard
 document.addEventListener('keydown',e=>{
-  if(e.code==='Space'){e.preventDefault();initAudio();if(gState==='play')tryJump();else if(gState==='menu')startGame();}
-  if(e.code==='Escape'&&gState!=='play'&&gState!=='menu'){showMenu();}
+  if(e.code==='Space'){
+    e.preventDefault();
+    initAudio();
+    if(gState==='play'){
+      tryJump();
+    }else if(gState==='menu'){
+      startGame();
+    }
+  }
+  if(e.code==='Escape'&&gState!=='play'&&gState!=='menu'){
+    showMenu();
+  }
 });
 
-// Gameplay tap surface — jump anywhere during play, double-tap = ability
-let lastTap=0,tapTimeout=null;
+// Gameplay tap surface — jump anywhere during play, optimized for mobile
+let lastTap=0,tapTimeout=null,tapActive=false;
 function handleGameplayTap(e){
-  e.preventDefault();initAudio();
+  if(gState!=='play')return;
+  
+  // Check if tap hit UI element
+  const hitUI=e.target.closest('.pressable,button,.shtab,.si,.mdc,#mab,.dlbox,.crbox');
+  if(hitUI)return;
+  
+  e.preventDefault();
+  e.stopPropagation();
+  initAudio();
+  
+  // Jump on any tap during gameplay
+  tryJump();
+  lastTap=performance.now();
+  
+  // Visual feedback: add screen flash
+  const afl=$('afl');
+  if(afl){
+    afl.style.background='radial-gradient(circle at '+e.clientX+'px '+e.clientY+'px,rgba(0,245,160,.2),transparent)';
+    afl.style.opacity='.5';
+    setTimeout(()=>{afl.style.opacity='0';},150);
+  }
+}
+
+// Enhanced pointerup handler for mobile tap detection
+function handlePointerUp(e){
   if(gState!=='play')return;
   const hitUI=e.target.closest('.pressable,button,.shtab,.si,.mdc,#mab,.dlbox,.crbox');
   if(hitUI)return;
-  const now=performance.now();
-  const tapGap=now-lastTap;
-  
-  // Clear previous tap timeout
-  if(tapTimeout){clearTimeout(tapTimeout);tapTimeout=null;}
-  
-  // Always jump on tap (traits are passive, no ability activation)
-  lastTap=0;
-  tryJump();
+  handleGameplayTap(e);
 }
+
+// Enhanced pointerdown handler for immediate feedback
+function handlePointerDown(e){
+  if(gState!=='play')return;
+  const hitUI=e.target.closest('.pressable,button,.shtab,.si,.mdc,#mab,.dlbox,.crbox');
+  if(hitUI)return;
+  e.preventDefault();
+  e.stopPropagation();
+  tapActive=true;
+}
+
 const W_el=$('W');
-if(W_el){W_el.addEventListener('pointerdown',handleGameplayTap,{passive:false});}
+if(W_el){
+  // Use pointerdown for immediate feedback
+  W_el.addEventListener('pointerdown',handlePointerDown,{passive:false});
+  // Use pointerup for actual jump trigger (prevents accidental multiple jumps)
+  W_el.addEventListener('pointerup',handlePointerUp,{passive:false});
+  // Also bind to touchend for better mobile support
+  W_el.addEventListener('touchend',handleGameplayTap,{passive:false});
+}
 else console.warn('Main window element (#W) not found');
 
 // ── Screen Opening Functions ───────────────────────────────
@@ -1666,7 +1726,12 @@ function spawnObs(atX){
 
 // ── Input Helpers ─────────────────────────────────────────
 function tryJump(){
-  if(player.jumpsLeft<=0&&!player.onGround&&player.coyoteT<=0){player.jumpBuf=JBF;return;}
+  // Check if can jump: has jumps left OR on ground OR within coyote time
+  if(player.jumpsLeft<=0&&!player.onGround&&player.coyoteT<=0){
+    // Buffer the jump for next frame
+    player.jumpBuf=JBF;
+    return;
+  }
   doJump2();
 }
 function doJump2(){
