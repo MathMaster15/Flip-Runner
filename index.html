@@ -38,47 +38,48 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
   user-select:none;
-  transition:transform .07s,box-shadow .07s,filter .07s;
+  transition:transform .08s ease-out,box-shadow .1s ease,filter .08s ease,background .12s ease;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
   min-height:40px;
   -webkit-user-select:none;
   -webkit-touch-callout:none;
+  will-change:transform,box-shadow;
 }
 /* Primary green */
-.btn.p{background:linear-gradient(150deg,#00f5a0,#00cc80);color:#021a0e;font-size:11px;padding:12px 26px;box-shadow:0 4px 0 #008855,0 6px 18px rgba(0,245,160,.28);}
-.btn.p::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 55%);pointer-events:none;}
-.btn.p:active{transform:translateY(3px);box-shadow:0 1px 0 #008855,0 2px 6px rgba(0,245,160,.15);}
-.btn.p:hover{filter:brightness(1.1);}
+.btn.p{background:linear-gradient(150deg,#00f5a0,#00cc80);color:#021a0e;font-size:11px;padding:12px 26px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(0,245,160,.32);}
+.btn.p::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 50%);pointer-events:none;}
+.btn.p:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(0,245,160,.2);}
+.btn.p:hover{filter:brightness(1.15);}
 /* Secondary dark */
-.btn.s{background:var(--s3);color:var(--tx);border:1px solid var(--di);font-size:10px;padding:10px 18px;box-shadow:0 3px 0 #060610,0 4px 12px rgba(0,0,0,.3);}
-.btn.s:active{transform:translateY(3px);box-shadow:0 1px 0 #060610;}
-.btn.s:hover{border-color:var(--pr);color:var(--pr);}
+.btn.s{background:linear-gradient(135deg,var(--s3),var(--s2));color:var(--tx);border:1px solid var(--di);font-size:10px;padding:10px 18px;box-shadow:0 3px 8px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.2);}
+.btn.s:active{transform:translateY(3px);box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.btn.s:hover{border-color:var(--pr);color:var(--pr);background:linear-gradient(135deg,var(--s4),var(--s3));}
 /* Gold */
-.btn.g{background:linear-gradient(150deg,#ffd700,#e0a000);color:#1a1000;font-size:10px;padding:10px 18px;box-shadow:0 4px 0 #a07000,0 6px 18px rgba(255,200,0,.28);}
-.btn.g::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 55%);pointer-events:none;}
-.btn.g:active{transform:translateY(3px);box-shadow:0 1px 0 #a07000;}
+.btn.g{background:linear-gradient(150deg,#ffd700,#e0a000);color:#1a1000;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(255,200,0,.32);}
+.btn.g::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);pointer-events:none;}
+.btn.g:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(255,200,0,.2);}
 /* Gem purple */
-.btn.gm{background:linear-gradient(150deg,#b060ff,#8040cc);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 0 #5020aa,0 6px 18px rgba(168,85,247,.28);}
-.btn.gm:active{transform:translateY(3px);box-shadow:0 1px 0 #5020aa;}
+.btn.gm{background:linear-gradient(150deg,#b060ff,#8040cc);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(168,85,247,.32);}
+.btn.gm:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(168,85,247,.2);}
 /* Danger red */
-.btn.d{background:linear-gradient(150deg,#ff3864,#cc1040);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 0 #880020;}
-.btn.d:active{transform:translateY(3px);box-shadow:0 1px 0 #880020;}
+.btn.d{background:linear-gradient(150deg,#ff3864,#cc1040);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(255,56,100,.28);}
+.btn.d:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(255,56,100,.2);}
 /* Tiny */
 .btn.t{font-size:8px;padding:5px 10px;border-radius:6px;letter-spacing:1px;}
 .pressable{touch-action:manipulation;}
-.pressing{filter:brightness(.97);}
-.btn.pressing{transform:translateY(3px);}
-.mdc.pressing,.si.pressing{transform:translateY(1px) scale(.985);}
-.shtab.pressing{color:var(--tx);border-bottom-color:rgba(0,245,160,.45);}
+.pressing{filter:brightness(.94);}
+.btn.pressing{transform:translateY(4px);}
+.mdc.pressing,.si.pressing{transform:translateY(2px) scale(.98);}
+.shtab.pressing{color:var(--tx);border-bottom-color:rgba(0,245,160,.6);}
 
 /* ══ SCREENS ══ */
 .scr{
   position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:12px;
   pointer-events:all;
-  transition:opacity .28s cubic-bezier(.4,0,.2,1),transform .28s cubic-bezier(.4,0,.2,1);
+  transition:opacity .32s cubic-bezier(.34,1.56,.64,1),transform .32s cubic-bezier(.34,1.56,.64,1);
 }
-.scr.H{opacity:0;pointer-events:none;transform:scale(.96) translateY(8px);}
+.scr.H{opacity:0;pointer-events:none;transform:scale(.92) translateY(12px);visibility:hidden;}
 
 /* ══ TOP HUD ══ */
 #top-hud{
@@ -93,7 +94,7 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 .rpill-v{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
 
 /* Score centered */
-#sc-hub{position:absolute;top:52px;left:50%;transform:translateX(-50%);text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;}
+#sc-hub{position:absolute;top:52px;left:50%;transform:translateX(-50%);text-align:center;opacity:0;transition:opacity .24s ease-out;pointer-events:none;}
 #sc-hub.vis{opacity:1;}
 #sc-v{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,8vw,52px);color:var(--pr);line-height:1;text-shadow:0 0 20px rgba(0,245,160,.5);letter-spacing:4px;}
 #sc-v.pop{animation:scpop .18s ease-out;}
@@ -101,20 +102,20 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 #mult-h{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--go);letter-spacing:2px;display:none;}
 
 /* Combo */
-#combo{position:absolute;bottom:54px;left:50%;transform:translateX(-50%) scale(.8);display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .25s,transform .25s;}
+#combo{position:absolute;bottom:54px;left:50%;transform:translateX(-50%) scale(.8);display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .2s ease,transform .2s ease;}
 #combo.vis{opacity:1;transform:translateX(-50%) scale(1);}
 #cov{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,5vw,28px);color:var(--go);letter-spacing:3px;text-shadow:0 0 14px rgba(255,215,0,.7);}
 #col{font-size:7px;color:#ffd70077;letter-spacing:3px;text-transform:uppercase;}
 
 /* Character Traits HUD */
-#th{position:absolute;top:52px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;opacity:0;transition:opacity .3s;min-width:120px;}
+#th{position:absolute;top:52px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;opacity:0;transition:opacity .24s ease-out;min-width:120px;}
 #th.vis{opacity:1;}
 #ti{font-size:14px;line-height:1;margin-bottom:3px;}
 #tname{font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;}
 .trait{font-size:7px;line-height:1.3;color:var(--tx);padding:2px 4px;background:rgba(0,245,160,.12);border-left:2px solid #00f5a0;padding-left:6px;}
 
 /* Ability HUD */
-#ah{position:absolute;top:118px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;opacity:0;transition:opacity .3s;min-width:92px;pointer-events:none;}
+#ah{position:absolute;top:118px;left:12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;opacity:0;transition:opacity .24s ease-out;min-width:92px;pointer-events:none;}
 #ah.vis{opacity:1;}
 #arow{display:flex;align-items:center;gap:5px;}
 #ai{font-size:16px;line-height:1;}
@@ -129,36 +130,36 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 #ast.cool{color:var(--mu);}
 
 /* Mode badge */
-#mbadge{position:absolute;top:52px;right:12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:4px 10px;border-radius:6px;opacity:0;transition:opacity .3s;}
+#mbadge{position:absolute;top:52px;right:12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:4px 10px;border-radius:6px;opacity:0;transition:opacity .24s ease-out;}
 #mbadge.vis{opacity:1;}
 
 /* Mobile ability button */
 #mab{
   position:absolute;bottom:22px;right:16px;width:62px;height:62px;border-radius:50%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  cursor:pointer;pointer-events:all;opacity:0;transition:opacity .3s,transform .1s,box-shadow .2s;
+  cursor:pointer;pointer-events:all;opacity:0;transition:opacity .24s ease,transform .12s ease,box-shadow .18s ease;
   font-family:'Space Mono',monospace;font-weight:700;border:2px solid var(--cy);
   background:rgba(0,0,0,.76);box-shadow:0 0 14px rgba(0,207,255,.22);
-  touch-action:manipulation;
+  touch-action:manipulation;will-change:transform,box-shadow;
 }
 #mab.vis{opacity:1;}
-#mab:active{transform:scale(.9);}
+#mab:active{transform:scale(.88);}
 #mab.rdy{animation:mobp 1.4s ease-in-out infinite;}
 #mai{font-size:22px;line-height:1;}
 #mcd{font-size:7px;letter-spacing:1px;color:var(--mu);}
 @keyframes mobp{0%,100%{box-shadow:0 0 14px rgba(0,207,255,.28)}50%{box-shadow:0 0 28px rgba(0,207,255,.72)}}
 
 /* Jump dots */
-#jd{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;opacity:0;transition:opacity .3s;}
+#jd{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;opacity:0;transition:opacity .24s ease-out;}
 #jd.vis{opacity:1;}
 .jdot{width:9px;height:9px;border-radius:50%;background:var(--pr);box-shadow:0 0 8px rgba(0,245,160,.6);transition:background .15s,box-shadow .15s;}
 .jdot.u{background:rgba(255,255,255,.1);box-shadow:none;}
 .jdot.pu{animation:dotp .2s ease;}
 
 /* Speed bar */
-#spw{position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s;}
+#spw{position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .24s ease-out;}
 #spw.vis{opacity:1;}
-#spb{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .5s;box-shadow:0 0 6px rgba(0,245,160,.4);}
+#spb{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .45s ease-out;box-shadow:0 0 6px rgba(0,245,160,.4);}
 
 /* Milestone banner */
 #msb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.4);font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,7vw,50px);letter-spacing:6px;color:#fff;text-shadow:0 0 28px rgba(255,215,0,.9),0 0 60px rgba(255,215,0,.4);pointer-events:none;opacity:0;white-space:nowrap;}
@@ -351,8 +352,8 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 .mdds{font-size:7px;letter-spacing:1px;color:var(--mu);text-transform:uppercase;text-align:center;}
 
 /* ══ DAILY LOGIN MODAL ══ */
-#dlm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
-#dlm.show{opacity:1;pointer-events:all;}
+#dlm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.0);backdrop-filter:blur(0px);z-index:200;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s ease,background .3s ease,backdrop-filter .3s ease;}
+#dlm.show{opacity:1;pointer-events:all;visibility:visible;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);}
 .dlbox{background:var(--s2);border:1px solid var(--di);border-radius:16px;padding:24px;max-width:340px;width:90%;display:flex;flex-direction:column;align-items:center;gap:16px;}
 .dlt{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--go);}
 .dlstr{font-size:10px;letter-spacing:3px;color:var(--mu);text-transform:uppercase;}
@@ -363,8 +364,8 @@ canvas{display:block;position:absolute;top:50%;left:50%;image-rendering:auto;}
 .dldi{font-size:16px;line-height:1;}
 
 /* ══ CHEST REWARD MODAL ══ */
-#crm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:201;opacity:0;pointer-events:none;transition:opacity .3s;}
-#crm.show{opacity:1;pointer-events:all;}
+#crm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.0);backdrop-filter:blur(0px);z-index:201;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s ease,background .3s ease,backdrop-filter .3s ease;}
+#crm.show{opacity:1;pointer-events:all;visibility:visible;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);}
 .crbox{background:var(--s2);border-radius:20px;padding:28px;max-width:300px;width:88%;display:flex;flex-direction:column;align-items:center;gap:16px;border:1px solid var(--di);}
 .crtype{font-size:9px;letter-spacing:4px;color:var(--mu);text-transform:uppercase;}
 .crchest{font-size:62px;line-height:1;animation:chb .5s cubic-bezier(.34,1.56,.64,1);}
@@ -896,6 +897,7 @@ function sfxAbil(){
 // ── $ helper ─────────────────────────────────────────────
 const $=id=>document.getElementById(id);
 const mabEl=$('mab');
+document.querySelectorAll('button').forEach(b=>{if(!b.hasAttribute('type'))b.type='button';});
 
 // ── Screen System ─────────────────────────────────────────
 // All screen IDs — complete list prevents any screen leaking through
@@ -917,6 +919,30 @@ function showMenu(){
 }
 function safeMode(mode){
   return MODES[mode]?mode:'endless';
+}
+function normalizeSaveData(){
+  const num=(v,f=0)=>{v=Number(v);return Number.isFinite(v)&&v>=0?Math.floor(v):f;};
+  const arr=(v,f,dict)=>[...new Set((Array.isArray(v)?v:f).filter(id=>typeof id==='string'&&(!dict||dict[id])))];
+  const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
+  SD.coins=num(SD.coins,200);SD.gems=num(SD.gems);SD.hs=num(SD.hs);
+  SD.chars=arr(SD.chars,['runner'],CHARS);
+  SD.skins=arr(SD.skins,['default'],SKINS);
+  SD.bgs=arr(SD.bgs,['void'],BGS);
+  SD.passClaimedTiers=Array.isArray(SD.passClaimedTiers)?SD.passClaimedTiers.map(v=>num(v)).filter(v=>v>0&&v<=PASS.length):[];
+  SD.passXP=num(SD.passXP);SD.passLevel=Math.max(1,Math.min(PASS.length,num(SD.passLevel,1)));
+  SD.upgrades=obj(SD.upgrades);SD.missions=obj(SD.missions);SD.achiev=obj(SD.achiev);SD.stats=obj(SD.stats);
+  Object.keys(CHARS).forEach(id=>{
+    const max=CHARS[id].upgrades?.length||0;
+    SD.upgrades[id]=Math.max(0,Math.min(max,num(SD.upgrades[id])));
+  });
+  ['runs','bestScore','totalDist','bestCombo','perfectJumps','nearMisses','coinsEarned','abilitiesUsed'].forEach(k=>{SD.stats[k]=num(SD.stats[k]);});
+  if(!SD.chars.includes('runner'))SD.chars.push('runner');
+  if(!SD.skins.includes('default'))SD.skins.push('default');
+  if(!SD.bgs.includes('void'))SD.bgs.push('void');
+  if(!CHARS[SD.selChar]||!SD.chars.includes(SD.selChar))SD.selChar='runner';
+  if(!SKINS[SD.selSkin]||!SD.skins.includes(SD.selSkin))SD.selSkin='default';
+  if(!BGS[SD.selBg]||!SD.bgs.includes(SD.selBg))SD.selBg='void';
+  SD.gameMode=safeMode(SD.gameMode);
 }
 function updateModeButton(){
   const mode=safeMode(SD.gameMode||curMode);
@@ -983,6 +1009,7 @@ let bgH=0,bgHT=0,msIdx=0,rwH=0;
 let player={},plats=[],obs=[];
 let coinsRun=0,gemsRun=0,xpRun=0;
 let nearMissesRun=0,perfectJumpsRun=0;
+let deathSeq=0;
 let scoreMult=1,scoreMultT=0;
 // Ability
 let abilCooldown=0,abilActive=false,abilTimer=0,abilMaxDur=1;
@@ -993,6 +1020,12 @@ let phxLeft=0,coinMult=1,ninjaClone=null;
 let stormOn=false,specShrunk=false,bubbleOn=false,bubbleHits=0;
 // Run extras
 let runPUs=[],gemFinder=false,taTimer=0;
+let runSpeedMult=1,runJumpBonus=0,runSlowTimer=0,runInvulTimer=0;
+function maxJumps(){
+  const extra=getStat(SD.selChar,'extraJumps')||0;
+  const jumperBonus=SD.selChar==='jumper'?3:0;
+  return Math.max(1,2+Math.floor(extra)+jumperBonus+runJumpBonus);
+}
 
 // ── Resource Helpers ──────────────────────────────────────
 function addCoins(n){SD.coins+=n;SD.stats.coinsEarned=(SD.stats.coinsEarned||0)+n;refreshCurrency();}
@@ -1300,17 +1333,20 @@ function bindPressable(el,fn,opt){
   el.dataset.boundPressable='1';
   el.classList.add('pressable');
   const cfg=Object.assign({sound:true,preventDefault:true,stopPropagation:true},opt||{});
-  let activeId=null,lastFire=0,touchActive=false;
+  let activeId=null,lastFire=0,touchActive=false,fired=false;
   const fire=e=>{
+    if(fired)return;
     const now=performance.now();
-    // More lenient debounce for mobile: 150ms (down from 200ms)
-    if(now-lastFire<150)return;
+    // Ultra-responsive debounce: 80ms for snappy feel
+    if(now-lastFire<80)return;
     lastFire=now;
+    fired=true;
     if(cfg.preventDefault&&e?.preventDefault)e.preventDefault();
     if(cfg.stopPropagation&&e?.stopPropagation)e.stopPropagation();
     initAudio();
     if(cfg.sound)sfxClick();
-    fn(e);
+    requestAnimationFrame(()=>fn(e));
+    setTimeout(()=>{fired=false;},80);
   };
   const clear=()=>{activeId=null;touchActive=false;el.classList.remove('pressing');};
   el.addEventListener('pointerdown',e=>{
@@ -1346,8 +1382,8 @@ function bindPressable(el,fn,opt){
   el.addEventListener('pointercancel',clear);
   el.addEventListener('pointerleave',e=>{if(activeId===e.pointerId)el.classList.remove('pressing');});
   el.addEventListener('click',e=>{
-    // Don't fire if already fired by pointerup
-    if(performance.now()-lastFire<150){
+    // Always allow click as fallback
+    if(performance.now()-lastFire<80){
       if(cfg.preventDefault)e.preventDefault();
       if(cfg.stopPropagation)e.stopPropagation();
       return;
@@ -1370,8 +1406,8 @@ function wire(id,fn,opt){
 // ── Wire all buttons at DOM ready ─────────────────────────
 // START SCREEN
 wire('bplay', ()=>startGame());
-wire('bmode', ()=>{syncModeSelection(SD.gameMode||curMode);hideAllGameHUD();showScreen('mods');gState='mode';}); // Opens mode screen and keeps current choice synced
-wire('bshop', ()=>{lastTap=0;openShop();});
+wire('bmode', ()=>openModeScreen()); // Opens mode screen and keeps current choice synced
+wire('bshop', ()=>openShop());
 wire('bpass', ()=>openPass());            // ✅ FIXED: Opens Runner Pass screen
 wire('bmis',  ()=>openMissions());        // ✅ FIXED: Opens missions screen
 wire('bach',  ()=>openAchiev());
@@ -1447,12 +1483,12 @@ document.addEventListener('keydown',e=>{
     if(gState==='play')activateAbility();
   }
   if(e.code==='Escape'&&gState!=='play'&&gState!=='menu'){
-    showMenu();
+    goToMenu();
   }
 });
 
 // Gameplay tap surface — jump anywhere during play, optimized for mobile
-let lastTap=0,tapTimeout=null,tapActive=false;
+let lastTap=0;
 function getEventPoint(e){
   const t=e.changedTouches?.[0]||e.touches?.[0]||e;
   return {
@@ -1502,7 +1538,6 @@ function handlePointerDown(e){
   if(hitUI)return;
   e.preventDefault();
   e.stopPropagation();
-  tapActive=true;
 }
 
 const W_el=$('W');
@@ -1517,21 +1552,29 @@ if(W_el){
 else console.warn('Main window element (#W) not found');
 
 // ── Screen Opening Functions ───────────────────────────────
+function openModeScreen(){
+  gState='mode';
+  lastTap=0;
+  syncModeSelection(SD.gameMode||curMode);
+  hideAllGameHUD();
+  showScreen('mods');
+}
 function openShop(){
   gState='shop';
   lastTap=0;
   hideAllGameHUD();
   showScreen('shs');
   refreshCurrency();
-  switchShopTab(curTab||'chars');
+  switchShopTab(curTab);
 }
 function openPass(){gState='pass';hideAllGameHUD();showScreen('pas');renderPassUI();}
 function openMissions(){gState='missions';hideAllGameHUD();showScreen('mis');renderMissionsScreen();}
 function openAchiev(){gState='achievements';hideAllGameHUD();showScreen('achs');renderAchievements();}
-function goToMenu(){stopBGM();hideAllGameHUD();showMenu();gState='menu';}
+function goToMenu(){deathSeq++;stopBGM();hideAllGameHUD();showMenu();gState='menu';}
 
 // ── Game Start / Over ─────────────────────────────────────
 function startGame(){
+  deathSeq++;
   curMode=safeMode(SD.gameMode||curMode);
   if(SD.gameMode!==curMode){SD.gameMode=curMode;save();}
   syncModeSelection(curMode);
@@ -1560,6 +1603,7 @@ function startGame(){
   startBGM();
 }
 function showGameOver(){
+  if(gState!=='dead'||!player.dead)return;
   stopBGM();gState='dead';
   // Update persistent stats
   SD.stats.runs=(SD.stats.runs||0)+1;
@@ -1630,7 +1674,7 @@ function setupAbilHUD(){
   if(mcd)mcd.textContent='READY';
   if(mab)mab.classList.add('rdy');
   
-  if(curMode==='zen'){
+  if(MODES[curMode]?.noAbility){
     const ah=$('ah');
     if(ah)ah.classList.remove('vis');
     if(mab)mab.classList.remove('vis');
@@ -1644,13 +1688,13 @@ function setupTraits(){
   
   // Apply passive traits based on character
   switch(SD.selChar){
-    case 'runner':    gSpeed*=1.15;break;       // Speed boost
+    case 'runner':    runSpeedMult=Math.max(runSpeedMult,1.15);break;       // Speed boost
     case 'glider':    player.fallMult=.7;break;       // Reduced fall
     case 'dasher':    player.dashTrailT=1;break;      // Quick dash
     case 'ghost':     break;                     // Phase through (handled in game logic)
     case 'magnet':    coinMult=Math.max(coinMult,2);break;          // Double coins passively
     case 'timebender': break;                    // Slow-mo (handled in game)
-    case 'jumper':    player.jumpsLeft+=3;break; // Extra jumps
+    case 'jumper':    player.jumpsLeft=maxJumps();break; // Extra jumps
     case 'tank':      shieldOn=true;shieldHits=3;break; // Shield active
     case 'ninja':     break;                     // Blink handled in game
     case 'storm':     break;                     // Thunder handled
@@ -1659,8 +1703,8 @@ function setupTraits(){
     case 'bubble':    bubbleOn=true;bubbleHits=2;break; // Bubble active
     case 'vortex':    break;                     // Spin handled
     case 'chrono':    break;                     // Rewind handled
-    case 'apex':      gSpeed*=1.2;player.jumpVel=-15;break; // Peak power
-    case 'phoenix':   phxLeft=1;break;           // Rebirth active
+    case 'apex':      runSpeedMult=Math.max(runSpeedMult,1.2);break; // Peak power
+    case 'phoenix':   break;                     // Rebirth handled by phxLeft
   }
   
   // Display traits HUD
@@ -1730,18 +1774,27 @@ function initGame(){
   slowOn=false;slowMult=1;shieldHits=0;shieldOn=false;coinMult=1;coinMultBase=1;
   ninjaClone=null;stormOn=false;specShrunk=false;bubbleOn=false;bubbleHits=0;
   scoreMult=1;scoreMultT=0;gemFinder=false;
+  runSpeedMult=1;runJumpBonus=0;runSlowTimer=0;runInvulTimer=0;
   $('afl').style.opacity='0';$('ari').classList.remove('show');$('slov').style.opacity='0';
   $('msb').className='';
   taTimer=MODES.timeatk.timeLimit*60;
-  phxLeft=upgLv('phoenix')>=3?2:1;
+  phxLeft=SD.selChar==='phoenix'?(upgLv('phoenix')>=3?2:1):0;
   // Apply queued powerups
-  runPUs.forEach(p=>{
-    if(p==='magnet')coinMult=3;
-    if(p==='shield'){shieldOn=true;shieldHits=2;}
-    if(p==='gemfinder')gemFinder=true;
-    if(p==='scoremult'){scoreMult=2;scoreMultT=20*60;}
-  });
-  runPUs=[];
+  if(MODES[curMode]?.noPu){
+    if(runPUs.length)ftxt('POWER-UPS OFF',PX+PW/2,GY-PH-46,MODES[curMode].col,13);
+  }else{
+    runPUs.forEach(p=>{
+      if(p==='magnet')coinMult=Math.max(coinMult,3);
+      if(p==='shield'){shieldOn=true;shieldHits=Math.max(shieldHits,2);}
+      if(p==='gemfinder')gemFinder=true;
+      if(p==='scoremult'){scoreMult=2;scoreMultT=Math.max(scoreMultT,20*60);}
+      if(p==='speedup')runSpeedMult=Math.max(runSpeedMult,1.1);
+      if(p==='extrajumps')runJumpBonus+=2;
+      if(p==='slowstart')runSlowTimer=Math.max(runSlowTimer,30*60);
+      if(p==='invincible')runInvulTimer=Math.max(runInvulTimer,30*60);
+    });
+    runPUs=[];
+  }
   // Apply upgrade bonuses: each upgrade level gives 1 extra shield hit (extra life)
   const upgradeLevel=upgLv(SD.selChar);
   if(upgradeLevel>0&&SD.selChar!=='phoenix'){
@@ -1750,9 +1803,8 @@ function initGame(){
     if(shieldHits>0)ftxt(`🛡️ SHIELD ×${shieldHits}`,PX+PW/2,GY-PH-30,CHARS[SD.selChar].glow,14);
   }
   initBG();
-  const exJ=getStat(SD.selChar,'extraJumps')||0;
   player={
-    x:PX,y:GY-PH,vy:0,jumpsLeft:2+Math.floor(exJ),onGround:true,
+    x:PX,y:GY-PH,vy:0,jumpsLeft:maxJumps(),onGround:true,
     squash:1,squashV:0,tilt:0,trail:[],dead:false,
     coyoteT:0,jumpBuf:0,
     dashing:false,dashT:0,dashTrailT:0,
@@ -1877,7 +1929,7 @@ function showAbilityFlash(ch){
   }
 }
 function activateAbility(){
-  if(gState!=='play'||curMode==='zen')return;
+  if(gState!=='play'||MODES[curMode]?.noAbility)return;
   const ch=CHARS[SD.selChar];if(!ch)return;
   if(SD.selChar==='phoenix'){
     ftxt('REBIRTH PASSIVE',player.x+PW/2,player.y-18,ch.glow,13);
@@ -2021,7 +2073,7 @@ function doApex(ch){
   ftxt('PEAK POWER!',player.x+PW/2,player.y-22,ch.color,16);burst(28,ch.color);
 }
 function updateAbilityHUD(dt){
-  if(curMode==='zen')return;
+  if(MODES[curMode]?.noAbility)return;
   const ch=CHARS[SD.selChar];if(!ch)return;
   const acdb=$('acdb'),adb=$('adb'),adw=$('adw');
   if(abilActive){
@@ -2170,11 +2222,15 @@ let lt=0;
 function update(ts){
   if(!lt)lt=ts;let dt=Math.min((ts-lt)/16.67,3);lt=ts;
   if(gState!=='play')return;
-  const sM=slowOn?slowMult:1;dt*=sM;
+  const rawDt=dt;
+  let sM=slowOn?slowMult:1;
+  if(runSlowTimer>0){runSlowTimer=Math.max(0,runSlowTimer-rawDt);sM*=.7;}
+  if(runInvulTimer>0)runInvulTimer=Math.max(0,runInvulTimer-rawDt);
+  dt*=sM;
   elapsed+=dt*(1/60);
   const md=MODES[curMode];
   const maxSpd=MS*(md.maxSpdM||1);
-  gSpeed=Math.min((BS+elapsed*SA*60)*boostMult,maxSpd*Math.max(1,boostMult));
+  gSpeed=Math.min((BS+elapsed*SA*60)*boostMult*runSpeedMult,maxSpd*Math.max(1,boostMult*runSpeedMult));
   const spb=$('spb');if(spb)spb.style.width=(Math.min(100,(gSpeed-BS)/(maxSpd-BS)*100))+'%';
   // Time attack mode countdown
   if(curMode==='timeatk'){
@@ -2238,7 +2294,7 @@ function update(ts){
   plats.forEach(p=>{
     if(player.vy>=0&&player.x+ppw>p.x&&player.x<p.x+p.w&&player.y+pph>=p.y&&player.y+pph<=p.y+p.h+player.vy+2){
       player.y=p.y-pph;player.vy=0;player.onGround=true;
-      const ej=getStat(SD.selChar,'extraJumps')||0;player.jumpsLeft=2+Math.floor(ej);
+      player.jumpsLeft=maxJumps();
       player.dashing=false;player.glideActive=false;
       if(!wasG){shake.pw=Math.max(shake.pw,1.5+gSpeed*.18);player.squash=.5;player.squashV=.12;spawnLPts();sfxLand();updateJumpDots();addCombo();}
       player.coyoteT=0;
@@ -2254,10 +2310,13 @@ function update(ts){
     if(o.ph)continue;
     if(player.ghosted&&!o.ph){o.ph=true;continue;}
     if(player.dashInvul)continue;
-    if(player.vortexMode&&ro(pr,getOR(o))){o.ph=true;score+=40;ftxt('DEFLECT!',player.x+PW/2,player.y-22,'#aa44ff',15);bst(10,'#aa44ff');continue;}
-    if(shieldOn&&ro(pr,getOR(o))){shieldHits--;o.ph=true;ftxt('BLOCKED!',player.x+PW/2,player.y-22,'#66aaff',16);bst(14,'#66aaff');shake.pw=5;if(shieldHits<=0)shieldOn=false;continue;}
-    if(bubbleOn&&ro(pr,getOR(o))){bubbleHits--;o.ph=true;const bon=getStat('bubble','bubbleB')||30;if(bon>0)score+=bon;ftxt('POP!',player.x+PW/2,player.y-22,'#88eeff',18);bst(18,'#88eeff');shake.pw=4;if(bubbleHits<=0)bubbleOn=false;continue;}
-    if(ro(pr,getOR(o))){killPlayer();return;}
+    const hit=ro(pr,getOR(o));
+    if(!hit)continue;
+    if(player.vortexMode){o.ph=true;score+=40;ftxt('DEFLECT!',player.x+PW/2,player.y-22,'#aa44ff',15);bst(10,'#aa44ff');continue;}
+    if(runInvulTimer>0){o.ph=true;ftxt('SAFE!',player.x+PW/2,player.y-22,'#ffd700',15);bst(10,'#ffd700');continue;}
+    if(shieldOn){shieldHits--;o.ph=true;ftxt('BLOCKED!',player.x+PW/2,player.y-22,'#66aaff',16);bst(14,'#66aaff');shake.pw=5;if(shieldHits<=0)shieldOn=false;continue;}
+    if(bubbleOn){bubbleHits--;o.ph=true;const bon=getStat('bubble','bubbleB')||30;if(bon>0)score+=bon;ftxt('POP!',player.x+PW/2,player.y-22,'#88eeff',18);bst(18,'#88eeff');shake.pw=4;if(bubbleHits<=0)bubbleOn=false;continue;}
+    killPlayer();return;
   }
   checkNM();
   const obsSpd=stormOn?gSpeed*.1:gSpeed;
@@ -2281,8 +2340,9 @@ function update(ts){
 }
 function killPlayer(){
   if(player.dead)return;if(checkPhxRevive())return;
-  player.dead=true;spawnDPts();shake.pw=18;resetCombo();
-  setTimeout(showGameOver,940);
+  player.dead=true;gState='dead';spawnDPts();shake.pw=18;resetCombo();
+  const seq=++deathSeq;
+  setTimeout(()=>{if(seq===deathSeq&&gState==='dead'&&player.dead)showGameOver();},940);
 }
 
 // ── Draw ─────────────────────────────────────────────────
@@ -2371,21 +2431,9 @@ function rrc(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y
 // ── SHOP SYSTEM ───────────────────────────────────────────
 let curTab='chars';
 function switchShopTab(tab){
-  curTab=tab;
-  document.querySelectorAll('.shtab').forEach(t=>t.classList.toggle('on',t.dataset.tab===tab));
-  renderShopTab(tab);
-  // Re-bind all newly created shop items
-  setTimeout(()=>{
-    document.querySelectorAll('.si').forEach(item=>{
-      if(!item.dataset.boundPressable){
-        const type=item.dataset.shopType;
-        const id=item.dataset.shopId;
-        const price=parseInt(item.dataset.price);
-        const cur=item.dataset.cur;
-        if(type&&id)bindPressable(item,()=>shopClick(type,id,price,cur,item));
-      }
-    });
-  },50);
+  curTab=['chars','skins','bgs','pups'].includes(tab)?tab:'chars';
+  document.querySelectorAll('.shtab').forEach(t=>t.classList.toggle('on',t.dataset.tab===curTab));
+  renderShopTab(curTab);
 }
 function renderShopTab(tab){
   const shbody=$('shbody');
@@ -2395,6 +2443,12 @@ function renderShopTab(tab){
   else if(tab==='skins')renderSkins();
   else if(tab==='bgs')renderBgs();
   else if(tab==='pups')renderPups();
+}
+function setShopMeta(item,type,id,price,cur){
+  item.dataset.shopType=type;
+  item.dataset.shopId=id;
+  item.dataset.price=String(price??0);
+  item.dataset.cur=cur||'coins';
 }
 // Price badge HTML
 function pBadge(owned,sel,price,cur){
@@ -2415,6 +2469,7 @@ function renderChars(){
     const has=ch.cur==='gems'?SD.gems>=ch.price:SD.coins>=ch.price;
     const item=document.createElement('div');
     item.className='si'+(sel?' SEL':'')+((!owned)?' LK':'')+((!owned&&has)?' AFF':'');
+    setShopMeta(item,'char',ch.id,ch.price,ch.cur);
     const bonusHits=lv>0?`<div style="font-size:7px;color:var(--go);margin-top:2px;letter-spacing:0.5px;">🛡️ +${lv} Life${lv>1?'s':''}</div>`:'';
     item.innerHTML=`<div class="rar ${rarCls(ch.rarity)}">${rarNm(ch.rarity)}</div>
       <canvas width="54" height="64" id="cp${ch.id}"></canvas>
@@ -2488,6 +2543,7 @@ function renderSkins(){
     const has=sk.cur==='gems'?SD.gems>=sk.price:SD.coins>=sk.price;
     const item=document.createElement('div');
     item.className='si'+(sel?' SEL':'')+((!owned)?' LK':'')+((!owned&&has)?' AFF':'');
+    setShopMeta(item,'skin',sk.id,sk.price,sk.cur);
     const eff=()=>{
       if(sk.effect==='fire')return`<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:18px;height:12px;background:linear-gradient(#ff4400,#ffcc00);border-radius:50% 50% 0 0;opacity:.9"></div>`;
       if(sk.effect==='rainbow'||sk.effect==='aurora')return`<div style="position:absolute;inset:0;background:linear-gradient(45deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f);opacity:.4;border-radius:8px"></div>`;
@@ -2515,6 +2571,7 @@ function renderBgs(){
     const has=bg.cur==='gems'?SD.gems>=bg.price:SD.coins>=bg.price;
     const item=document.createElement('div');
     item.className='si'+(sel?' SEL':'')+((!owned)?' LK':'')+((!owned&&has)?' AFF':'');
+    setShopMeta(item,'bg',bg.id,bg.price,bg.cur);
     item.innerHTML=`<div class="rar ${rarCls(bg.rarity)}">${rarNm(bg.rarity)}</div>
       <div style="width:100%;height:42px;border-radius:6px;overflow:hidden;${bg.prev};border:1px solid #333;flex-shrink:0;"></div>
       <div class="sinm">${bg.name}</div>
@@ -2535,6 +2592,7 @@ function renderPups(){
     const has=pu.cur==='gems'?SD.gems>=pu.price:SD.coins>=pu.price;
     const item=document.createElement('div');
     item.className='si'+(has?' AFF':'');
+    setShopMeta(item,'pu',pu.id,pu.price,pu.cur);
     item.innerHTML=`<div class="rar ${rarCls(pu.rarity)}">${rarNm(pu.rarity)}</div>
       <div style="font-size:32px;line-height:1">${pu.icon}</div>
       <div class="sinm">${pu.name}</div>
@@ -2557,7 +2615,8 @@ function shopClick(type,id,price,cur,el){
   let arr,key;
   if(type==='char'){arr=SD.chars;key='selChar';}
   else if(type==='skin'){arr=SD.skins;key='selSkin';}
-  else{arr=SD.bgs;key='selBg';}
+  else if(type==='bg'){arr=SD.bgs;key='selBg';}
+  else return;
   if(arr.includes(id)){SD[key]=id;save();sfxBuy();renderShopTab(curTab);updateCharBadge();}
   else{
     const ok=cur==='gems'?spendGems(price):spendCoins(price);
@@ -2591,6 +2650,7 @@ function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 
 // ── BOOT ─────────────────────────────────────────────────
 load();
+normalizeSaveData();
 // Ensure all chars have upgrade entries
 Object.keys(CHARS).forEach(id=>{if(!SD.upgrades[id])SD.upgrades[id]=0;});
 // Ensure defaults
