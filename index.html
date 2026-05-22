@@ -54,39 +54,47 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
   user-select:none;
-  transition:transform .08s ease-out,box-shadow .1s ease,filter .08s ease,background .12s ease;
+  transition:transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s cubic-bezier(.34,1.56,.64,1),filter .1s ease-out,background .15s ease;
   display:inline-flex;align-items:center;justify-content:center;gap:5px;
   min-height:40px;
   -webkit-user-select:none;
   -webkit-touch-callout:none;
-  will-change:transform,box-shadow;
+  will-change:transform,box-shadow,filter;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform:translateZ(0);
+  -webkit-transform:translate3d(0,0,0);
 }
 /* Primary green */
 .btn.p{background:linear-gradient(150deg,#00f5a0,#00cc80);color:#021a0e;font-size:11px;padding:12px 26px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(0,245,160,.32);}
 .btn.p::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 50%);pointer-events:none;}
-.btn.p:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(0,245,160,.2);}
-.btn.p:hover{filter:brightness(1.15);}
+.btn.p:active{transform:translateY(5px) scale(.98);box-shadow:0 1px 4px rgba(0,0,0,.4),0 1px 6px rgba(0,245,160,.12);}
+.btn.p:hover{filter:brightness(1.2);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.5),0 8px 24px rgba(0,245,160,.4);}
 /* Secondary dark */
 .btn.s{background:linear-gradient(135deg,var(--s3),var(--s2));color:var(--tx);border:1px solid var(--di);font-size:10px;padding:10px 18px;box-shadow:0 3px 8px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.2);}
-.btn.s:active{transform:translateY(3px);box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.btn.s:hover{border-color:var(--pr);color:var(--pr);background:linear-gradient(135deg,var(--s4),var(--s3));}
+.btn.s:active{transform:translateY(4px) scale(.97);box-shadow:0 1px 3px rgba(0,0,0,.5);}
+.btn.s:hover{border-color:var(--pr);color:var(--pr);background:linear-gradient(135deg,var(--s4),var(--s3));transform:translateY(-2px);box-shadow:0 5px 14px rgba(0,245,160,.2);}
 /* Gold */
 .btn.g{background:linear-gradient(150deg,#ffd700,#e0a000);color:#1a1000;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(255,200,0,.32);}
 .btn.g::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);pointer-events:none;}
-.btn.g:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(255,200,0,.2);}
+.btn.g:active{transform:translateY(5px) scale(.98);box-shadow:0 1px 4px rgba(0,0,0,.4),0 1px 6px rgba(255,200,0,.12);}
+.btn.g:hover{transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 6px 16px rgba(0,0,0,.5),0 8px 24px rgba(255,200,0,.3);}
 /* Gem purple */
 .btn.gm{background:linear-gradient(150deg,#b060ff,#8040cc);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(168,85,247,.32);}
-.btn.gm:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(168,85,247,.2);}
+.btn.gm:active{transform:translateY(5px) scale(.98);box-shadow:0 1px 4px rgba(0,0,0,.4),0 1px 6px rgba(168,85,247,.12);}
+.btn.gm:hover{transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 6px 16px rgba(0,0,0,.5),0 8px 24px rgba(168,85,247,.3);}
 /* Danger red */
 .btn.d{background:linear-gradient(150deg,#ff3864,#cc1040);color:#fff;font-size:10px;padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.4),0 6px 18px rgba(255,56,100,.28);}
-.btn.d:active{transform:translateY(4px);box-shadow:0 0px 8px rgba(0,0,0,.3),0 2px 8px rgba(255,56,100,.2);}
+.btn.d:active{transform:translateY(5px) scale(.98);box-shadow:0 1px 4px rgba(0,0,0,.4),0 1px 6px rgba(255,56,100,.12);}
 /* Tiny */
-.btn.t{font-size:8px;padding:5px 10px;border-radius:6px;letter-spacing:1px;}
+.btn.t{font-size:8px;padding:5px 10px;border-radius:6px;letter-spacing:1px;transition:all .15s cubic-bezier(.34,1.56,.64,1);}
+.btn.t:hover{transform:scale(1.1);}
+.btn.t:active{transform:scale(.92);}
 .pressable{touch-action:manipulation;}
-.pressing{filter:brightness(.94);}
-.btn.pressing{transform:translateY(4px);}
-.mdc.pressing,.si.pressing{transform:translateY(2px) scale(.98);}
-.shtab.pressing{color:var(--tx);border-bottom-color:rgba(0,245,160,.6);}
+.pressing{filter:brightness(.92);}
+.btn.pressing{transform:translateY(5px) scale(.98);}
+.mdc.pressing,.si.pressing{transform:translateY(3px) scale(.96);box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.shtab.pressing{color:var(--tx);border-bottom-color:rgba(0,245,160,.8);transform:translateY(1px);}
 
 /* ══ SCREENS ══ */
 .scr{
@@ -96,6 +104,8 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
   padding:max(0px,var(--st)) max(0px,var(--sr)) max(10px,var(--sb)) max(0px,var(--sl));
   box-sizing:border-box;
   transition:opacity .32s cubic-bezier(.34,1.56,.64,1),transform .32s cubic-bezier(.34,1.56,.64,1);
+  will-change:opacity,transform;
+  transform:translateZ(0);
 }
 .scr.H{opacity:0;pointer-events:none;transform:scale(.92) translateY(12px);visibility:hidden;}
 
@@ -108,7 +118,8 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
   pointer-events:none;z-index:60;opacity:0;transition:opacity .3s;
 }
 #top-hud.vis{opacity:1;}
-.rpill{display:flex;align-items:center;gap:5px;background:rgba(14,14,26,.92);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:5px 11px;}
+.rpill{display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(14,14,26,.95),rgba(20,20,40,.88));border:1px solid rgba(0,245,160,.15);border-radius:20px;padding:5px 11px;box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 2px rgba(0,245,160,.1);transition:all .2s ease;backdrop-filter:blur(4px);}
+.rpill:hover{border-color:rgba(0,245,160,.3);box-shadow:0 4px 12px rgba(0,245,160,.15),inset 0 1px 2px rgba(0,245,160,.15);}
 .rpill-v{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
 
 /* Score centered */
@@ -177,7 +188,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 /* Speed bar */
 #spw{position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .24s ease-out;}
 #spw.vis{opacity:1;}
-#spb{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .45s ease-out;box-shadow:0 0 6px rgba(0,245,160,.4);}
+#spb{height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));width:0%;transition:width .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 6px rgba(0,245,160,.4),inset 0 0 4px rgba(255,255,255,.1);}
 
 /* Milestone banner */
 #msb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.4);font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,7vw,50px);letter-spacing:6px;color:#fff;text-shadow:0 0 28px rgba(255,215,0,.9),0 0 60px rgba(255,215,0,.4);pointer-events:none;opacity:0;white-space:nowrap;}
@@ -214,7 +225,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .mpx{flex-shrink:0;background:var(--s2);border:1px solid var(--di);border-radius:8px;padding:6px 10px;display:flex;flex-direction:column;gap:3px;min-width:116px;}
 .mpt{font-size:8px;letter-spacing:1px;color:var(--tx);text-transform:uppercase;white-space:nowrap;}
 .mppw{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
-.mppb{height:100%;background:var(--pr);border-radius:2px;transition:width .4s;}
+.mppb{height:100%;background:linear-gradient(90deg,#ffd700,#ff8800);border-radius:2px;transition:width .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 8px rgba(255,200,0,.5);}
 .mpr{font-size:7px;color:var(--go);letter-spacing:1px;}
 
 /* ══ GAME OVER ══ */
@@ -248,7 +259,12 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .shpv{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
 .shtabs{display:flex;border-bottom:1px solid var(--s3);width:100%;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
 .shtabs::-webkit-scrollbar{display:none;}
-.shtab{flex-shrink:0;padding:10px 12px;font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;cursor:pointer;pointer-events:all;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;touch-action:manipulation;}
+.shtab{flex-shrink:0;padding:10px 12px;font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;cursor:pointer;pointer-events:all;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,transform .12s ease;touch-action:manipulation;will-change:transform;position:relative;}
+.shtab::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--pr);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.shtab.on{color:var(--pr);border-bottom-color:var(--pr);}
+.shtab.on::after{transform:scaleX(1);}
+.shtab:hover:not(.on){color:rgba(0,245,160,.6);}
+.shtab.pressing{transform:translateY(2px);}
 .shtab:hover{color:var(--tx);}
 .shtab.on{color:var(--pr);border-bottom-color:var(--pr);}
 .shbody{flex:1;overflow-y:auto;width:100%;padding:14px;padding-bottom:max(18px,calc(14px + var(--sb)));scrollbar-width:thin;scrollbar-color:#333 transparent;}
@@ -256,12 +272,15 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .shbody::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 .shgr{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px;}
 /* Shop item card */
-.si{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;pointer-events:all;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .15s;touch-action:manipulation;}
+.si{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;pointer-events:all;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .15s;touch-action:manipulation;will-change:transform;backface-visibility:hidden;}
 .si::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);}
 .si:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.5);}
-.si.SEL{border-color:var(--pr);box-shadow:0 0 0 1px var(--pr),0 0 18px rgba(0,245,160,.18);}
+.si{background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;pointer-events:all;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .15s,background .2s;touch-action:manipulation;will-change:transform;backface-visibility:hidden;}
+.si:hover:not(.LK){background:var(--s3);box-shadow:0 0 12px rgba(0,245,160,.12);}
+.si:active:not(.LK){transform:scale(.97);}
+.si.SEL{border-color:var(--pr);box-shadow:0 0 0 1px var(--pr),0 0 18px rgba(0,245,160,.18);background:linear-gradient(135deg,rgba(0,245,160,.06),rgba(0,245,160,.02));}
 .si.AFF:not(.SEL){border-color:rgba(0,245,160,.22);}
-.si.LK{opacity:.5;}
+.si.LK{opacity:.5;cursor:not-allowed;}
 .si.LK:hover{transform:none;box-shadow:none;}
 .rar{position:absolute;top:5px;right:5px;font-size:7px;letter-spacing:1px;padding:1px 5px;border-radius:4px;font-weight:700;text-transform:uppercase;}
 .rc{background:rgba(100,100,120,.6);color:#aaa;}
@@ -284,7 +303,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .upt{font-size:8px;letter-spacing:3px;color:var(--mu);text-transform:uppercase;margin-bottom:8px;}
 .upr{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .upbw{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
-.upbf{height:100%;border-radius:3px;transition:width .5s;}
+.upbf{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(90deg,#00f5a0,#00cc80);box-shadow:0 0 8px rgba(0,245,160,.4);}
 .uplv{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
 .upfx{font-size:7px;letter-spacing:1px;color:#889;text-transform:uppercase;line-height:1.6;margin-bottom:8px;}
 
@@ -364,14 +383,16 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .chrbody::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
 .chrg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 /* Character card in collection - Enhanced */
-.chrc{background:linear-gradient(135deg,var(--s2),var(--s3));border:2px solid var(--s3);border-radius:14px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;pointer-events:all;position:relative;overflow:hidden;transition:all .2s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;will-change:transform,border-color,box-shadow;box-shadow:0 4px 12px rgba(0,0,0,.3);}
+.chrc{background:linear-gradient(135deg,var(--s2),var(--s3));border:2px solid var(--s3);border-radius:14px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;pointer-events:all;position:relative;overflow:hidden;transition:all .2s cubic-bezier(.34,1.56,.64,1);touch-action:manipulation;will-change:transform,border-color,box-shadow;box-shadow:0 4px 12px rgba(0,0,0,.3);backface-visibility:hidden;}
 .chrc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);}
 .chrc::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(0,245,160,.1),transparent);opacity:0;transition:opacity .3s ease;}
 .chrc:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 16px 32px rgba(0,0,0,.5);border-color:rgba(0,245,160,.3);}
 .chrc:hover::after{opacity:1;}
 .chrc.SEL{border-color:var(--pr);background:linear-gradient(135deg,rgba(0,245,160,.08),rgba(0,245,160,.04));box-shadow:0 0 0 2px var(--pr),0 0 28px rgba(0,245,160,.28),inset 0 0 16px rgba(0,245,160,.1);}
 .chrc.SEL::after{opacity:1;background:radial-gradient(circle at 50% 0,rgba(0,245,160,.25),transparent);}
-.chrci{font-size:48px;line-height:1;text-shadow:0 0 12px currentColor;filter:drop-shadow(0 0 8px rgba(0,245,160,.3));transition:transform .3s ease,text-shadow .3s ease;}
+.chrci{font-size:48px;line-height:1;text-shadow:0 0 12px currentColor;filter:drop-shadow(0 0 8px rgba(0,245,160,.3));transition:transform .3s ease,text-shadow .3s ease;backface-visibility:hidden;will-change:transform;}
+.chrc:hover .chrci{transform:scale(1.12) rotate(-5deg);text-shadow:0 0 16px currentColor;filter:drop-shadow(0 0 12px rgba(0,245,160,.5));}
+.chrc.SEL .chrci{animation:float-icon 2s ease-in-out infinite;}
 .chrc:hover .chrci{transform:scale(1.12);text-shadow:0 0 20px rgba(0,245,160,.6);}
 .chrname{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--tx);font-weight:700;text-transform:uppercase;}
 .chrab{font-size:8px;letter-spacing:1px;color:var(--pr);text-transform:uppercase;text-align:center;font-weight:600;}
@@ -380,7 +401,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 /* Character detail modal - Enhanced */
 #chrm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.0);backdrop-filter:blur(0px);z-index:202;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .32s cubic-bezier(.34,1.56,.64,1),background .32s cubic-bezier(.34,1.56,.64,1),backdrop-filter .32s cubic-bezier(.34,1.56,.64,1);}
 #chrm.show{opacity:1;pointer-events:all;visibility:visible;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);}
-.chrbox{background:linear-gradient(180deg,var(--s1),var(--s2));border:2px solid var(--s3);border-radius:20px;padding:24px;max-width:340px;width:90%;max-height:85vh;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:0 0 60px rgba(0,245,160,.18);transform:scale(.92) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .32s ease;position:relative;overflow:hidden;overflow-y:auto;}
+.chrbox{background:linear-gradient(180deg,var(--s1),var(--s2));border:2px solid var(--s3);border-radius:20px;padding:24px;max-width:340px;width:90%;max-height:85vh;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:0 0 60px rgba(0,245,160,.18),0 0 40px rgba(0,245,160,.08);transform:scale(.92) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .32s ease;position:relative;overflow:hidden;overflow-y:auto;will-change:transform,opacity;backface-visibility:hidden;}
 .chrbox::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(0,245,160,.1),transparent 80%);pointer-events:none;}
 .chrbox::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);}
 #chrm.show .chrbox{transform:scale(1) translateY(0);opacity:1;}
@@ -425,10 +446,11 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 .mode-current{font-size:9px;letter-spacing:2px;color:var(--tx);text-transform:uppercase;background:var(--s2);border:1px solid var(--di);border-radius:8px;padding:7px 12px;min-width:190px;text-align:center;}
 .mode-current span{color:var(--pr);}
 .mdgr{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px;}
-.mdc{background:var(--s2);border:2px solid var(--s3);border-radius:8px;padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;pointer-events:all;position:relative;transition:border-color .2s,transform .15s,box-shadow .2s,background .2s;touch-action:manipulation;outline:none;}
+.mdc{background:var(--s2);border:2px solid var(--s3);border-radius:8px;padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;pointer-events:all;position:relative;transition:border-color .2s,transform .15s,box-shadow .2s,background .2s;touch-action:manipulation;outline:none;will-change:transform,box-shadow;backface-visibility:hidden;}
 .mdc:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.5);}
 .mdc:focus-visible{box-shadow:0 0 0 2px rgba(255,255,255,.35),0 0 0 5px rgba(0,245,160,.22);}
-.mdc.SEL{border-color:var(--mcol,var(--pr));background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--s2);box-shadow:0 0 0 1px var(--mcol,var(--pr)),0 0 18px rgba(0,245,160,.2);}
+.mdc.SEL{border-color:var(--mcol,var(--pr));background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--s2);box-shadow:0 0 0 1px var(--mcol,var(--pr)),0 0 18px rgba(0,245,160,.2);animation:pulse-sel .6s ease-in-out infinite;}
+@keyframes pulse-sel{0%,100%{box-shadow:0 0 0 1px var(--mcol,var(--pr)),0 0 18px rgba(0,245,160,.2);}50%{box-shadow:0 0 0 2px var(--mcol,var(--pr)),0 0 28px rgba(0,245,160,.3);}}
 .mdc.SEL::after{content:'SELECTED';position:absolute;top:6px;right:6px;font-size:6px;letter-spacing:1px;color:#071008;background:var(--mcol,var(--pr));border-radius:6px;padding:2px 5px;font-weight:700;}
 .mdic{font-size:30px;line-height:1;}
 .mdnm{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:3px;}
@@ -477,12 +499,13 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 @keyframes glp{0%,100%{text-shadow:0 0 12px rgba(0,245,160,.4)}50%{text-shadow:0 0 26px rgba(0,245,160,.85)}}
 @keyframes scpop{0%{transform:scale(1)}50%{transform:scale(1.22)}100%{transform:scale(1)}}
 @keyframes dotp{0%{transform:scale(1)}50%{transform:scale(1.8)}100%{transform:scale(1)}}
-@keyframes godrop{from{opacity:0;transform:translateY(-28px) scale(1.12)}to{opacity:1;transform:translateY(0)}}
-@keyframes gorise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes godrop{from{opacity:0;transform:translateY(-28px) scale(1.12)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes gorise{from{opacity:0;transform:translateY(22px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes nrf{from{letter-spacing:4px}to{letter-spacing:9px}}
 @keyframes flin{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 @keyframes pulseu{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-8px);opacity:.7}}
+@keyframes popIn{0%{opacity:0;transform:scale(.7);filter:blur(4px)}50%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
 
 /* ══ MOBILE FIT & HUD ══ */
 @media (max-width:480px){
@@ -595,6 +618,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 
 <!-- ► TOP HUD (gameplay) -->
 <div id="top-hud">
+  <button id="bgm-toggle" class="btn t" style="position:absolute;top:12px;left:12px;z-index:999;padding:8px 12px;border-radius:8px;background:rgba(0,245,160,.12);border:1px solid rgba(0,245,160,.3);color:var(--pr);font-size:16px;cursor:pointer;will-change:transform;" title="Toggle music">🎵</button>
   <div class="rpill"><span style="font-size:13px">🪙</span><span class="rpill-v" id="hud-coins" style="color:var(--go)">0</span></div>
   <div id="sc-hub" style="position:static;opacity:1;transform:none;">
     <div id="sc-v">0</div><div id="sc-l">Score</div>
@@ -832,6 +856,7 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 
 <script>
 'use strict';
+console.log('[MAIN SCRIPT] Starting...');
 /*
  ╔══════════════════════════════════════════════════════╗
  ║  FLIP RUNNER v8 — Complete Professional Edition      ║
@@ -851,7 +876,10 @@ canvas{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch-a
 
 // ── Canvas ──────────────────────────────────────────────
 const C=document.getElementById('C');
+window.$ = id => document.getElementById(id);
 const MOB=(()=>{try{return matchMedia('(max-width:768px),(pointer:coarse)').matches||window.innerWidth<769;}catch(e){return /Mobi|Android|iPhone|iPad|iPod|webOS/i.test(navigator.userAgent||'');}})();
+// Performance hint for better mobile rendering
+if(MOB)document.documentElement.style.fontSize='16px';
 const ctx=C.getContext('2d',MOB?{alpha:true,desynchronized:true}:{})||C.getContext('2d');
 const W=600,H=400;
 function viewportBox(){
@@ -945,7 +973,7 @@ const CHARS={
     upgrades:[{name:'Lv2',desc:'+35% speed',cdB:0,sb:'boostMult:1.35'},{name:'Lv3',desc:'+4s duration',cdB:30,sb:'boostDur:1.4'},{name:'Lv4',desc:'CD -50fr',cdB:50,sb:''}],pUpg:[80,160,300],
     powers:[{lv:1,name:'Basic Sprint',desc:'Standard speed boost'},{lv:3,name:'Enhanced Sprint',desc:'40% faster movement'},{lv:5,name:'Overdrive',desc:'Destroys small obstacles'},{lv:10,name:'Lightning Reflexes',desc:'CD halved, instant reload'}]},
   glider:{id:'glider',name:'Glider',price:250,cur:'coins',rarity:'rare',color:'#00cfff',eyeColor:'#001a2e',glow:'#00cfff',shape:'diamond',
-    ability:'Float',abilDesc:'Glide for 10s',gravMult:0.7,fallMult:0.95,jumpVel:-13,baseCD:200,baseDur:600,
+    ability:'Float',abilDesc:'Glide for 10s',gravMult:0.88,fallMult:0.92,jumpVel:-14,baseCD:220,baseDur:600,
     upgrades:[{name:'Lv2',desc:'60% slower fall',cdB:0,sb:'glideMult:0.35'},{name:'Lv3',desc:'+4s glide',cdB:30,sb:'glideDM:1.4'},{name:'Lv4',desc:'CD -40',cdB:40,sb:''}],pUpg:[80,160,300],
     powers:[{lv:1,name:'Gentle Float',desc:'Slow descent'},{lv:3,name:'Controlled Flight',desc:'80% less falling speed'},{lv:5,name:'Air Mastery',desc:'Float through obstacles'},{lv:10,name:'Sky Dancer',desc:'Double float duration'}]},
   dasher:{id:'dasher',name:'Dasher',price:400,cur:'coins',rarity:'rare',color:'#ff6b35',eyeColor:'#1a0500',glow:'#ff6b35',shape:'arrow',
@@ -961,7 +989,7 @@ const CHARS={
     upgrades:[{name:'Lv2',desc:'4× coins',cdB:0,sb:'coinMult:4'},{name:'Lv3',desc:'5× coins +3s',cdB:30,sb:'coinMult:5'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[100,200,350],
     powers:[{lv:1,name:'Coin Suction',desc:'3× coins'},{lv:3,name:'Mega Magnet',desc:'4× coins'},{lv:5,name:'Vacuum Core',desc:'5× + auto-collect'},{lv:10,name:'Infinite Wealth',desc:'6× + gems too'}]},
   timebender:{id:'timebender',name:'Bender',price:800,cur:'coins',rarity:'epic',color:'#ffe066',eyeColor:'#1a1400',glow:'#ffe066',shape:'star',
-    ability:'Slow-Mo 8s',abilDesc:'World slows 8s',gravMult:1,fallMult:1.55,jumpVel:-14,baseCD:320,baseDur:480,
+    ability:'Slow-Mo 10s',abilDesc:'World slows 10s',gravMult:1,fallMult:1.55,jumpVel:-14,baseCD:300,baseDur:620,
     upgrades:[{name:'Lv2',desc:'+3s slow-mo',cdB:0,sb:'slowDur:1.3'},{name:'Lv3',desc:'70% slowdown',cdB:40,sb:'slowDepth:0.7'},{name:'Lv4',desc:'CD -70',cdB:70,sb:''}],pUpg:[120,240,480],
     powers:[{lv:1,name:'Time Warp',desc:'Slow time'},{lv:3,name:'Temporal Shift',desc:'50% slower'},{lv:5,name:'Time Master',desc:'70% slower + see ahead'},{lv:10,name:'Chrono Control',desc:'Almost freeze time'}]},
   jumper:{id:'jumper',name:'Jumper',price:350,cur:'coins',rarity:'rare',color:'#88ff55',eyeColor:'#0a1a00',glow:'#88ff55',shape:'bouncy',
@@ -969,7 +997,7 @@ const CHARS={
     upgrades:[{name:'Lv2',desc:'+7 jumps',cdB:0,sb:'extraJumps:7'},{name:'Lv3',desc:'Higher jump',cdB:25,sb:'jumpBonus:1.5'},{name:'Lv4',desc:'CD -35',cdB:35,sb:''}],pUpg:[80,160,280],
     powers:[{lv:1,name:'Extra Bounce',desc:'+5 jumps'},{lv:3,name:'Spring Legs',desc:'+7 jumps'},{lv:5,name:'Sky Reach',desc:'+10 jumps, higher'},{lv:10,name:'Lunar Hop',desc:'Jump like on moon'}]},
   tank:{id:'tank',name:'Tank',price:700,cur:'coins',rarity:'epic',color:'#66aaff',eyeColor:'#001022',glow:'#66aaff',shape:'wide',
-    ability:'Shield 12s',abilDesc:'Absorb 3 hits',gravMult:1.2,fallMult:1.8,jumpVel:-13,baseCD:300,baseDur:720,
+    ability:'Shield 12s',abilDesc:'Absorb 3 hits',gravMult:1.05,fallMult:1.65,jumpVel:-13,baseCD:320,baseDur:700,
     upgrades:[{name:'Lv2',desc:'5 hit shield',cdB:0,sb:'shieldHits:5'},{name:'Lv3',desc:'+5s shield',cdB:30,sb:'shieldDur:1.4'},{name:'Lv4',desc:'CD -70',cdB:70,sb:''}],pUpg:[120,240,450],
     powers:[{lv:1,name:'Basic Guard',desc:'Shield 3 hits'},{lv:3,name:'Reinforced',desc:'Shield 5 hits'},{lv:5,name:'Fort Mode',desc:'Shield 8 hits + regen'},{lv:10,name:'Unbreakable',desc:'Infinite shield time'}]},
   ninja:{id:'ninja',name:'Ninja',price:600,cur:'coins',rarity:'epic',color:'#8888ff',eyeColor:'#e0e0ff',glow:'#8888ff',shape:'slim',
@@ -977,35 +1005,35 @@ const CHARS={
     upgrades:[{name:'Lv2',desc:'150px blink',cdB:0,sb:'teleportDist:150'},{name:'Lv3',desc:'Shadow clone',cdB:25,sb:'shadowClone:1'},{name:'Lv4',desc:'CD -45',cdB:45,sb:''}],pUpg:[100,200,380],
     powers:[{lv:1,name:'Quick Blink',desc:'Teleport 100px'},{lv:3,name:'Shadow Step',desc:'Leave clone'},{lv:5,name:'Ninja Master',desc:'Multi-blink+'},{lv:10,name:'Ghost Strike',desc:'Strike from shadow'}]},
   phoenix:{id:'phoenix',name:'Phoenix',price:10,cur:'gems',rarity:'legend',color:'#ff8800',eyeColor:'#1a0500',glow:'#ff4400',shape:'flame',
-    ability:'Rebirth',abilDesc:'Auto-revive (passive)',gravMult:0.95,fallMult:1.45,jumpVel:-14,baseCD:0,baseDur:0,
+    ability:'Rebirth',abilDesc:'Auto-revive (passive)',gravMult:0.98,fallMult:1.4,jumpVel:-14,baseCD:240,baseDur:1,
     upgrades:[{name:'Lv2',desc:'Fire trail',cdB:0,sb:'fireMult:1.5'},{name:'Lv3',desc:'2 revives',cdB:0,sb:'revives:2'},{name:'Lv4',desc:'x2 score',cdB:0,sb:'rebirthBonus:2'}],pUpg:[150,300,600],
     powers:[{lv:1,name:'First Life',desc:'1 revive'},{lv:3,name:'Infernal',desc:'Fire trail + 2nd life'},{lv:5,name:'Phoenix Rising',desc:'3 lives + regen'},{lv:10,name:'Eternal Flame',desc:'Endless rebirth'}]},
   storm:{id:'storm',name:'Storm',price:8,cur:'gems',rarity:'legend',color:'#ccddff',eyeColor:'#001122',glow:'#aabbff',shape:'diamond',
     ability:'Thunder 10s',abilDesc:'Freeze obstacles',gravMult:0.95,fallMult:1.45,jumpVel:-14,baseCD:280,baseDur:600,
     upgrades:[{name:'Lv2',desc:'Longer freeze',cdB:0,sb:'stormDur:1.4'},{name:'Lv3',desc:'x1.5 score',cdB:25,sb:'stormBonus:1.5'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[100,200,380],
     powers:[{lv:1,name:'Static Field',desc:'Freeze obstacles'},{lv:3,name:'Lightning Bolt',desc:'x1.5 score'},{lv:5,name:'Storm Lord',desc:'Chain lightning'},{lv:10,name:'Tempest Fury',desc:'Destroy all + damage'}]},
-  specter:{id:'specter',name:'Specter',price:900,cur:'coins',rarity:'epic',color:'#aaffee',eyeColor:'#004433',glow:'#44ffcc',shape:'slim',
-    ability:'Shrink 10s',abilDesc:'Half size slides under walls',gravMult:0.9,fallMult:1.4,jumpVel:-14,baseCD:260,baseDur:600,
+  specter:{id:'specter',name:'Specter',price:800,cur:'coins',rarity:'epic',color:'#aaffee',eyeColor:'#004433',glow:'#44ffcc',shape:'slim',
+    ability:'Shrink 10s',abilDesc:'Half size slides under walls',gravMult:0.95,fallMult:1.35,jumpVel:-14,baseCD:260,baseDur:580,
     upgrades:[{name:'Lv2',desc:'+3s shrink',cdB:0,sb:'shrinkDur:1.3'},{name:'Lv3',desc:'+50% speed',cdB:25,sb:'shrinkSpeed:1.5'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[110,220,440],
     powers:[{lv:1,name:'Mini Form',desc:'Shrink mode'},{lv:3,name:'Speed Reduction',desc:'50% faster'},{lv:5,name:'Tiny Master',desc:'Invisible to enemies'},{lv:10,name:'Atomic',desc:'Phase through all'}]},
   mech:{id:'mech',name:'Mech',price:750,cur:'coins',rarity:'epic',color:'#aabb88',eyeColor:'#1a2200',glow:'#bbcc66',shape:'wide',
-    ability:'Stomp AOE',abilDesc:'Clears nearby obstacles',gravMult:1.3,fallMult:2.0,jumpVel:-15,baseCD:220,baseDur:30,
+    ability:'Stomp AOE',abilDesc:'Clears nearby obstacles',gravMult:1.08,fallMult:1.75,jumpVel:-14,baseCD:240,baseDur:120,
     upgrades:[{name:'Lv2',desc:'Wider AOE',cdB:0,sb:'stompR:1.5'},{name:'Lv3',desc:'+60 per clear',cdB:20,sb:'stompB:60'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[110,220,420],
     powers:[{lv:1,name:'Ground Pound',desc:'Clear nearby'},{lv:3,name:'Dual Stomp',desc:'Wider AOE'},{lv:5,name:'Mech King',desc:'Bonus per hit'},{lv:10,name:'Apocalypse',desc:'Massive explosion'}]},
   bubble:{id:'bubble',name:'Bubble',price:550,cur:'coins',rarity:'rare',color:'#88eeff',eyeColor:'#002233',glow:'#66ddff',shape:'round',
-    ability:'Bubble 12s',abilDesc:'Absorbs 2 hits',gravMult:0.75,fallMult:0.9,jumpVel:-12.5,baseCD:200,baseDur:720,
+    ability:'Bubble 12s',abilDesc:'Absorbs 2 hits',gravMult:1.08,fallMult:1.3,jumpVel:-13,baseCD:220,baseDur:650,
     upgrades:[{name:'Lv2',desc:'4 hit bubble',cdB:0,sb:'bubbleHits:4'},{name:'Lv3',desc:'+50 pts/hit',cdB:25,sb:'bubbleB:50'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[90,180,340],
     powers:[{lv:1,name:'Soft Shield',desc:'Bubble 2 hits'},{lv:3,name:'Bubble Burst',desc:'4 hits + bonus'},{lv:5,name:'Bubble Master',desc:'Explosion power'},{lv:10,name:'Bubble Storm',desc:'Endless bubbles'}]},
-  vortex:{id:'vortex',name:'Vortex',price:1200,cur:'coins',rarity:'epic',color:'#aa44ff',eyeColor:'#1a0a2d',glow:'#cc66ff',shape:'star',
-    ability:'Spin 10s',abilDesc:'Spin & deflect obstacles',gravMult:0.95,fallMult:1.35,jumpVel:-14,baseCD:260,baseDur:600,
+  vortex:{id:'vortex',name:'Vortex',price:1000,cur:'coins',rarity:'epic',color:'#aa44ff',eyeColor:'#1a0a2d',glow:'#cc66ff',shape:'star',
+    ability:'Spin 10s',abilDesc:'Spin & deflect obstacles',gravMult:1,fallMult:1.4,jumpVel:-14,baseCD:260,baseDur:580,
     upgrades:[{name:'Lv2',desc:'Wider spin',cdB:0,sb:'spinR:1.5'},{name:'Lv3',desc:'+3s spin',cdB:30,sb:'spinDur:1.3'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[130,260,500],
     powers:[{lv:1,name:'Spiral',desc:'Spin & deflect'},{lv:3,name:'Twister',desc:'Wider spin'},{lv:5,name:'Vortex Lord',desc:'Absorb & launch'},{lv:10,name:'Tornado',desc:'Destroy everything'}]},
-  chrono:{id:'chrono',name:'Chrono',price:1400,cur:'coins',rarity:'epic',color:'#ffdd00',eyeColor:'#2d2200',glow:'#ffff44',shape:'diamond',
-    ability:'Rewind 8s',abilDesc:'Go back in time 5s',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:300,baseDur:480,
+  chrono:{id:'chrono',name:'Chrono',price:1200,cur:'coins',rarity:'epic',color:'#ffdd00',eyeColor:'#2d2200',glow:'#ffff44',shape:'diamond',
+    ability:'Rewind 10s',abilDesc:'Go back in time 5s',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:300,baseDur:620,
     upgrades:[{name:'Lv2',desc:'Rewind 7s',cdB:0,sb:'rewindDur:1.4'},{name:'Lv3',desc:'+2 rewinds',cdB:35,sb:'rewindCount:2'},{name:'Lv4',desc:'CD -60',cdB:60,sb:''}],pUpg:[140,280,550],
     powers:[{lv:1,name:'Rewind',desc:'Go back 5s'},{lv:3,name:'Time Warden',desc:'2 rewinds'},{lv:5,name:'Chrono Master',desc:'Restore HP'},{lv:10,name:'Time Traveler',desc:'Perfect control'}]},
-  apex:{id:'apex',name:'Apex',price:2000,cur:'coins',rarity:'legend',color:'#ff00ff',eyeColor:'#330033',glow:'#ff44ff',shape:'rect',
-    ability:'Peak Power',abilDesc:'Max stats 12s',gravMult:1,fallMult:1.5,jumpVel:-16,baseCD:320,baseDur:720,
+  apex:{id:'apex',name:'Apex',price:1500,cur:'coins',rarity:'legend',color:'#ff00ff',eyeColor:'#330033',glow:'#ff44ff',shape:'rect',
+    ability:'Peak Power',abilDesc:'Max stats 12s',gravMult:1,fallMult:1.5,jumpVel:-15,baseCD:320,baseDur:680,
     upgrades:[{name:'Lv2',desc:'Longer peak',cdB:0,sb:'peakDur:1.4'},{name:'Lv3',desc:'x2 coins/peak',cdB:40,sb:'peakCoin:2'},{name:'Lv4',desc:'CD -80',cdB:80,sb:''}],pUpg:[200,400,800],
     powers:[{lv:1,name:'Power Surge',desc:'All stats max'},{lv:3,name:'Ultra Mode',desc:'x2 coins earned'},{lv:5,name:'Apex Ascend',desc:'x3 multiplier'},{lv:10,name:'Godly Form',desc:'Unstoppable force'}]},
   volt:{id:'volt',name:'Volt Runner',price:450,cur:'coins',rarity:'rare',color:'#ffff00',eyeColor:'#1a1a00',glow:'#ffff44',shape:'rect',
@@ -1013,39 +1041,39 @@ const CHARS={
     upgrades:[{name:'Lv2',desc:'+40% speed',cdB:0,sb:'voltSpeed:1.4'},{name:'Lv3',desc:'+3s duration',cdB:25,sb:'voltDur:1.3'},{name:'Lv4',desc:'CD -40',cdB:40,sb:''}],pUpg:[90,180,340],
     powers:[{lv:1,name:'Lightning Dash',desc:'Sprint fast'},{lv:3,name:'Electric Speed',desc:'40% faster'},{lv:5,name:'Volt Master',desc:'Destroys walls'},{lv:10,name:'Chain Lightning',desc:'Strike enemies'}]},
   shadow:{id:'shadow_ninja',name:'Shadow Ninja',price:550,cur:'coins',rarity:'rare',color:'#8844ff',eyeColor:'#4433aa',glow:'#aa77ff',shape:'slim',
-    ability:'Shadow Phase',abilDesc:'Invisible 8s',gravMult:0.95,fallMult:1.25,jumpVel:-14.5,baseCD:240,baseDur:480,
+    ability:'Shadow Phase',abilDesc:'Invisible 10s',gravMult:0.98,fallMult:1.2,jumpVel:-14,baseCD:240,baseDur:600,
     upgrades:[{name:'Lv2',desc:'+2s invisibility',cdB:0,sb:'shadowDur:1.25'},{name:'Lv3',desc:'Auto-dodge',cdB:20,sb:'shadowDodge:1'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[110,220,420],
     powers:[{lv:1,name:'Shadow Phase',desc:'Go invisible'},{lv:3,name:'Dark Master',desc:'Auto-dodge'},{lv:5,name:'Ninja Assassin',desc:'Reveal enemies'},{lv:10,name:'Shadow Lord',desc:'Perfect evasion'}]},
   blaze:{id:'blaze_titan',name:'Blaze Titan',price:500,cur:'coins',rarity:'rare',color:'#ff4400',eyeColor:'#330000',glow:'#ff6600',shape:'wide',
-    ability:'Inferno Burst',abilDesc:'Fire aura 10s',gravMult:1.1,fallMult:1.6,jumpVel:-14,baseCD:260,baseDur:600,
+    ability:'Inferno Burst',abilDesc:'Fire aura 10s',gravMult:1.02,fallMult:1.5,jumpVel:-14,baseCD:260,baseDur:580,
     upgrades:[{name:'Lv2',desc:'Wider aura',cdB:0,sb:'blazeRange:1.5'},{name:'Lv3',desc:'+5s burning',cdB:25,sb:'blazeDur:1.4'},{name:'Lv4',desc:'CD -60',cdB:60,sb:''}],pUpg:[100,200,380],
     powers:[{lv:1,name:'Blaze Aura',desc:'Fire shield'},{lv:3,name:'Inferno',desc:'Wider flames'},{lv:5,name:'Fire Titan',desc:'Burn obstacles'},{lv:10,name:'Apocalypse Fire',desc:'Massive flames'}]},
   frost:{id:'frost_byte',name:'Frost Byte',price:480,cur:'coins',rarity:'rare',color:'#00ddff',eyeColor:'#003355',glow:'#44eeff',shape:'diamond',
-    ability:'Freeze Wave',abilDesc:'Freeze obstacles 8s',gravMult:0.85,fallMult:1.2,jumpVel:-14,baseCD:280,baseDur:480,
+    ability:'Freeze Wave',abilDesc:'Freeze obstacles 10s',gravMult:0.95,fallMult:1.3,jumpVel:-14,baseCD:280,baseDur:600,
     upgrades:[{name:'Lv2',desc:'Wider freeze',cdB:0,sb:'frostRange:1.6'},{name:'Lv3',desc:'+3s freeze',cdB:30,sb:'frostDur:1.35'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[95,190,360],
     powers:[{lv:1,name:'Freeze Wave',desc:'Ice shield'},{lv:3,name:'Blizzard',desc:'Wider freeze'},{lv:5,name:'Ice Master',desc:'Shatter frozen'},{lv:10,name:'Eternal Winter',desc:'Complete freeze'}]},
   gravity:{id:'gravity_zero',name:'Gravity Zero',price:520,cur:'coins',rarity:'rare',color:'#aa44ff',eyeColor:'#330066',glow:'#cc66ff',shape:'star',
-    ability:'Zero Gravity',abilDesc:'Float & jump high',gravMult:0.5,fallMult:0.8,jumpVel:-18,baseCD:240,baseDur:600,
+    ability:'Zero Gravity',abilDesc:'Float & jump high',gravMult:0.92,fallMult:1.05,jumpVel:-16,baseCD:260,baseDur:500,
     upgrades:[{name:'Lv2',desc:'Higher float',cdB:0,sb:'gravityLift:1.5'},{name:'Lv3',desc:'+4s gravity',cdB:35,sb:'gravityDur:1.4'},{name:'Lv4',desc:'CD -40',cdB:40,sb:''}],pUpg:[110,220,420],
     powers:[{lv:1,name:'Zero G',desc:'Low gravity'},{lv:3,name:'Moon Jump',desc:'Super high'},{lv:5,name:'Gravity Master',desc:'Float anywhere'},{lv:10,name:'Anti-Gravity',desc:'Defy physics'}]},
   cyber:{id:'cyber_pulse',name:'Cyber Pulse',price:600,cur:'coins',rarity:'epic',color:'#00ffcc',eyeColor:'#003344',glow:'#00ffee',shape:'round',
-    ability:'Magnet Core',abilDesc:'Pull coins & shield',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:200,baseDur:600,
+    ability:'Magnet Core',abilDesc:'Pull coins & shield',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:220,baseDur:580,
     upgrades:[{name:'Lv2',desc:'Wider pull',cdB:0,sb:'cyberRange:1.8'},{name:'Lv3',desc:'+3 coin pull',cdB:20,sb:'cyberMagnet:1.5'},{name:'Lv4',desc:'CD -35',cdB:35,sb:''}],pUpg:[130,260,500],
     powers:[{lv:1,name:'Magnet Core',desc:'Pull coins'},{lv:3,name:'Cyber Shield',desc:'Protective aura'},{lv:5,name:'Cyber King',desc:'Triple pull'},{lv:10,name:'Perfect Sync',desc:'Absorb everything'}]},
   storm_hunt:{id:'storm_hunt',name:'Storm Hunter',price:700,cur:'coins',rarity:'epic',color:'#aabbff',eyeColor:'#112244',glow:'#ccddff',shape:'arrow',
-    ability:'Thunder Strike',abilDesc:'Lightning destroys',gravMult:1,fallMult:1.5,jumpVel:-15,baseCD:260,baseDur:600,
+    ability:'Thunder Strike 10s',abilDesc:'Lightning destroys',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:260,baseDur:600,
     upgrades:[{name:'Lv2',desc:'More strikes',cdB:0,sb:'stormStrikes:2'},{name:'Lv3',desc:'+bonus XP',cdB:30,sb:'stormXP:1.5'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[140,280,540],
     powers:[{lv:1,name:'Thunder Strike',desc:'Lightning attack'},{lv:3,name:'Chain Lightning',desc:'Multi-strike'},{lv:5,name:'Storm Master',desc:'Massive damage'},{lv:10,name:'Tempest Lord',desc:'Obliterate all'}]},
   venom:{id:'venom_fang',name:'Venom Fang',price:650,cur:'coins',rarity:'epic',color:'#00dd88',eyeColor:'#004422',glow:'#22ffaa',shape:'bouncy',
-    ability:'Poison Trail',abilDesc:'Toxic trail 10s',gravMult:1.05,fallMult:1.55,jumpVel:-14,baseCD:240,baseDur:600,
+    ability:'Poison Trail',abilDesc:'Toxic trail 10s',gravMult:1,fallMult:1.5,jumpVel:-14,baseCD:240,baseDur:580,
     upgrades:[{name:'Lv2',desc:'Thicker poison',cdB:0,sb:'venomThick:1.6'},{name:'Lv3',desc:'More resources',cdB:25,sb:'venomResources:2'},{name:'Lv4',desc:'CD -45',cdB:45,sb:''}],pUpg:[120,240,460],
     powers:[{lv:1,name:'Poison Trail',desc:'Toxic path'},{lv:3,name:'Toxic Cloud',desc:'Thicker poison'},{lv:5,name:'Venom Master',desc:'Dissolve walls'},{lv:10,name:'Toxic Apocalypse',desc:'Melt everything'}]},
-  neon_phantom:{id:'neon_phantom',name:'Neon Phantom',price:12,cur:'gems',rarity:'legend',color:'#ff00ff',eyeColor:'#aa00aa',glow:'#ff44ff',shape:'slim',
-    ability:'Glitch Warp',abilDesc:'Teleport to safety',gravMult:0.9,fallMult:1.3,jumpVel:-14,baseCD:200,baseDur:600,
+  neon_phantom:{id:'neon_phantom',name:'Neon Phantom',price:15,cur:'gems',rarity:'legend',color:'#ff00ff',eyeColor:'#aa00aa',glow:'#ff44ff',shape:'slim',
+    ability:'Glitch Warp',abilDesc:'Teleport to safety',gravMult:0.92,fallMult:1.25,jumpVel:-14,baseCD:220,baseDur:600,
     upgrades:[{name:'Lv2',desc:'More teleports',cdB:0,sb:'glitchTP:2'},{name:'Lv3',desc:'Auto-dodge',cdB:15,sb:'glitchDodge:1'},{name:'Lv4',desc:'CD -30',cdB:30,sb:''}],pUpg:[180,360,720],
     powers:[{lv:1,name:'Glitch Warp',desc:'Teleport out'},{lv:3,name:'Glitch Master',desc:'Auto-escape'},{lv:5,name:'Digital Ghost',desc:'Untrackable'},{lv:10,name:'Glitch Lord',desc:'Reality warper'}]},
-  solar_knight:{id:'solar_knight',name:'Solar Knight',price:15,cur:'gems',rarity:'legend',color:'#ffdd00',eyeColor:'#664400',glow:'#ffff00',shape:'rect',
-    ability:'Solar Overdrive',abilDesc:'2× score & speed',gravMult:1,fallMult:1.45,jumpVel:-16,baseCD:280,baseDur:720,
+  solar_knight:{id:'solar_knight',name:'Solar Knight',price:12,cur:'gems',rarity:'legend',color:'#ffdd00',eyeColor:'#664400',glow:'#ffff00',shape:'rect',
+    ability:'Solar Overdrive',abilDesc:'2× score & speed',gravMult:1,fallMult:1.45,jumpVel:-15,baseCD:280,baseDur:680,
     upgrades:[{name:'Lv2',desc:'3× multiplier',cdB:0,sb:'solarMult:3'},{name:'Lv3',desc:'+5s duration',cdB:40,sb:'solarDur:1.4'},{name:'Lv4',desc:'CD -50',cdB:50,sb:''}],pUpg:[200,400,800],
     powers:[{lv:1,name:'Solar Boost',desc:'2× multiplier'},{lv:3,name:'Solar Flare',desc:'3× earnings'},{lv:5,name:'Solar King',desc:'4× multiplier'},{lv:10,name:'Solar God',desc:'Infinite power'}]},
 };
@@ -1288,32 +1316,38 @@ const MODES={
 };
 let curMode='endless';
 
-// ── Audio ─────────────────────────────────────────────────
+// ── Audio System (Premium) ───────────────────────────────
 const AudioCtx=window.AudioContext||window.webkitAudioContext;
-let actx=null,bgmIv=null;
-function initAudio(){if(actx)return;try{actx=new AudioCtx();}catch(e){}}
+let actx=null,bgmIv=null,bgmMuted=false,masterVol=1;
+function initAudio(){if(actx)return;try{actx=new AudioCtx();if(actx.state==='suspended'){document.addEventListener('click',()=>actx.resume(),{once:true});document.addEventListener('touchstart',()=>actx.resume(),{once:true});}masterVol=SD.settings?.volume??1;}catch(e){}}
+function toggleBGM(){bgmMuted=!bgmMuted;if(bgmMuted)stopBGM();else startBGM();SD.settings=SD.settings||{};SD.settings.bgmMuted=bgmMuted;save();updateMuteButton();}
+function updateMuteButton(){const btn=$('bgm-toggle');if(btn)btn.textContent=bgmMuted?'🔇':'🎵';}
 function tone(f,t,d,v,fe){
   if(!actx)return;
   try{const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.type=t;o.frequency.setValueAtTime(f,actx.currentTime);if(fe!=null)o.frequency.exponentialRampToValueAtTime(fe,actx.currentTime+d);g.gain.setValueAtTime(v,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d);}catch(e){}
 }
 function startBGM(){
-  if(!actx||bgmIv)return;
-  try{const mg=actx.createGain();mg.gain.value=0.032;mg.connect(actx.destination);const ns=[130,165,196,220];let i=0;function pn(){const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(mg);o.type='sine';o.frequency.value=ns[i%4]*(i<8?1:2);i=(i+1)%16;g.gain.setValueAtTime(.4,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.75);o.start();o.stop(actx.currentTime+.8);}pn();bgmIv=setInterval(pn,500);}catch(e){}
+  if(!actx||bgmIv||bgmMuted)return;
+  try{const mg=actx.createGain();mg.gain.value=0.022*masterVol;mg.connect(actx.destination);const ns=[110,130,165,196,220,165,196,147];let i=0;function pn(){const o1=actx.createOscillator(),o2=actx.createOscillator(),g=actx.createGain();o1.connect(g);o2.connect(g);g.connect(mg);o1.type='sine';o2.type='sine';o1.frequency.value=ns[i%ns.length];o2.frequency.value=ns[(i+2)%ns.length]*.5;i++;g.gain.setValueAtTime(.35,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+1.2);o1.start();o2.start();o1.stop(actx.currentTime+1.3);o2.stop(actx.currentTime+1.3);}pn();bgmIv=setInterval(pn,650);}catch(e){}
 }
 function stopBGM(){if(bgmIv){clearInterval(bgmIv);bgmIv=null;}}
-const sfxJump=()=>tone(260,'square',.13,.09,520);
-const sfxLand=()=>tone(110,'sine',.08,.09,55);
-const sfxCoin=()=>tone(880,'sine',.07,.07,1200);
-const sfxNM=()=>tone(420,'triangle',.1,.08,620);
-const sfxPerf=()=>{tone(880,'sine',.1,.09,1100);setTimeout(()=>tone(1100,'sine',.1,.07,1320),80);};
-const sfxCombo=()=>tone(660,'sine',.1,.07,880);
-const sfxDeath=()=>{tone(280,'sawtooth',.28,.13,60);setTimeout(()=>tone(75,'sine',.38,.1),90);};
-const sfxBuy=()=>{tone(440,'sine',.1,.11,660);setTimeout(()=>tone(660,'sine',.12,.09,880),90);};
-const sfxUpg=()=>[440,660,880,1100].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.1,.09,f*1.2),i*55));
-const sfxMS=()=>[440,660,880,1100].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.12,.09,f*1.25),i*85));
-const sfxRevive=()=>{tone(300,'sine',.3,.13,1200);setTimeout(()=>tone(800,'sine',.2,.11,1600),200);};
-const sfxClick=()=>tone(400,'sine',.05,.05,600);
+// Premium SFX with better variety and depth
+const sfxJump=()=>{tone(320,'square',.11,.085,600);setTimeout(()=>tone(480,'sine',.08,.05,720),30);};
+const sfxLand=()=>{tone(140,'sine',.06,.085,70);setTimeout(()=>tone(95,'sine',.1,.04,50),50);};
+const sfxCoin=()=>{tone(900,'sine',.06,.08,1280);setTimeout(()=>tone(1200,'sine',.05,.06,1500),60);};
+const sfxNM=()=>{tone(440,'triangle',.08,.09,640);tone(620,'sine',.08,.07,880);};
+const sfxPerf=()=>{tone(900,'sine',.08,.09,1100);setTimeout(()=>tone(1150,'sine',.09,.07,1380),70);setTimeout(()=>tone(1380,'sine',.08,.08,1640),140);};
+const sfxCombo=()=>{tone(680,'sine',.08,.08,920);tone(850,'sine',.07,.07,1100);};
+const sfxDeath=()=>{tone(300,'sawtooth',.25,.12,80);setTimeout(()=>tone(120,'sine',.35,.1,60),80);};
+const sfxBuy=()=>{tone(480,'sine',.09,.1,720);setTimeout(()=>tone(720,'sine',.11,.09,960),80);};
+const sfxUpg=()=>{tone(480,'sine',.08,.1,680);tone(680,'sine',.08,.09,900);tone(900,'sine',.08,.08,1100);};
+const sfxMS=()=>{tone(480,'sine',.1,.1,700);tone(700,'sine',.1,.08,920);tone(920,'sine',.1,.07,1100);};
+const sfxRevive=()=>{tone(350,'sine',.25,.12,1400);setTimeout(()=>tone(880,'sine',.15,.1,1700),180);};
+const sfxClick=()=>tone(420,'sine',.04,.04,640);
+const sfxReward=()=>{tone(600,'sine',.1,.1,880);setTimeout(()=>tone(900,'sine',.1,.08,1200),100);};
 const sfxChest=()=>[440,600,800,1000].forEach((f,i)=>setTimeout(()=>tone(f,'triangle',.1,.09,f*1.3),i*55));
+
+// Character-specific ability sound
 function sfxAbil(){
   const c=SD.selChar;
   if(['runner','dasher'].includes(c))tone(580,'square',.09,.09,280);
@@ -1329,24 +1363,6 @@ function sfxAbil(){
   else tone(500,'sine',.15,.1,900);
 }
 
-// ── $ helper ─────────────────────────────────────────────
-const $=id=>document.getElementById(id);
-const mabEl=$('mab');
-document.querySelectorAll('button').forEach(b=>{if(!b.hasAttribute('type'))b.type='button';});
-
-// ── Screen System ─────────────────────────────────────────
-// All screen IDs — complete list prevents any screen leaking through
-const ALL_SCREENS=['ss','mods','shs','pas','trs','mis','achs','chrs','gos'];
-
-function showScreen(id){
-  ALL_SCREENS.forEach(s=>{
-    const el=$(s);
-    if(el){
-      if(s===id){el.classList.remove('H');el.style.pointerEvents='all';}
-      else{el.classList.add('H');el.style.pointerEvents='none';}
-    }
-  });
-}
 function showMenu(){
   gState='menu';
   showScreen('ss');
@@ -1426,6 +1442,25 @@ function hideAllGameHUD(){
   const sch=$('sc-hub');if(sch)sch.style.opacity='0';
   const ar=$('ari');if(ar)ar.classList.remove('show');
   const sv=$('slov');if(sv)sv.style.opacity='0';
+}
+
+// ── Screen Controller ─────────────────────────────────────
+const ALL_SCREENS=['ss','mods','shs','pas','trs','mis','achs','chrs','gos'];
+const mabEl=$('mab');
+function showScreen(id){
+  let shown=false;
+  ALL_SCREENS.forEach(screenId=>{
+    const el=$(screenId);
+    if(!el)return;
+    const active=screenId===id;
+    el.classList.toggle('H',!active);
+    if(active){
+      shown=true;
+      const scrollBody=el.querySelector('.shbody,.pabody,.trbody,.misbody,.achbody,.chrbody');
+      if(scrollBody)scrollBody.scrollTop=0;
+    }
+  });
+  if(!shown)console.warn(`Screen not found: ${id}`);
 }
 
 // ── Game Constants ────────────────────────────────────────
@@ -1843,6 +1878,8 @@ function wire(id,fn,opt){
 }
 
 // ── Wire all buttons at DOM ready ─────────────────────────
+// Music toggle
+wire('bgm-toggle', ()=>toggleBGM());
 // START SCREEN
 wire('bplay', ()=>startGame());
 wire('bmode', ()=>openModeScreen()); // Opens mode screen and keeps current choice synced
@@ -1945,16 +1982,14 @@ function handleGameplayTap(e){
   // Check if tap hit UI element
   const hitUI=e.target.closest('.pressable,button,.shtab,.si,.mdc,#mab,.dlbox,.crbox');
   if(hitUI)return;
-  const now=performance.now();
-  if(now-lastTap<90)return;
-
-  e.preventDefault();
-  e.stopPropagation();
+  // Immediate response: no debounce so taps feel instantaneous
+  if(e.preventDefault) e.preventDefault();
+  if(e.stopPropagation) e.stopPropagation();
   initAudio();
 
-  // Jump on any tap during gameplay
+  // Jump on any tap during gameplay (no delay)
   tryJump();
-  lastTap=now;
+  lastTap=performance.now();
 
   // Visual feedback: add screen flash
   const afl=$('afl');
@@ -2002,6 +2037,7 @@ function openModeScreen(){
   hideAllGameHUD();
   showScreen('mods');
 }
+
 function openShop(){
   gState='shop';
   lastTap=0;
@@ -2103,7 +2139,7 @@ function setupAbilHUD(){
   const ch=CHARS[SD.selChar];
   const ai=$('ai'),al=$('al'),acdb=$('acdb'),adb=$('adb'),ast=$('ast'),adw=$('adw');
   const mab=mabEl,mai=$('mai'),mcd=$('mcd');
-  
+
   if(ai)ai.textContent=AICONS[SD.selChar]||'⚡';
   if(al)al.textContent=ch.ability;
   if(acdb)acdb.style.background=ch.glow;
@@ -2118,7 +2154,7 @@ function setupAbilHUD(){
   if(mai)mai.textContent=AICONS[SD.selChar]||'⚡';
   if(mcd)mcd.textContent='READY';
   if(mab)mab.classList.add('rdy');
-  
+
   if(MODES[curMode]?.noAbility){
     const ah=$('ah');
     if(ah)ah.classList.remove('vis');
@@ -2130,7 +2166,7 @@ function setupAbilHUD(){
 function setupTraits(){
   const ch=CHARS[SD.selChar];
   if(!ch)return;
-  
+
   // Apply passive traits based on character
   switch(SD.selChar){
     case 'runner':    runSpeedMult=Math.max(runSpeedMult,1.15);break;       // Speed boost
@@ -2151,10 +2187,10 @@ function setupTraits(){
     case 'apex':      runSpeedMult=Math.max(runSpeedMult,1.2);break; // Peak power
     case 'phoenix':   break;                     // Rebirth handled by phxLeft
   }
-  
+
   // Display traits HUD
   updateTraitsHUD();
-  
+
   // Visual feedback
   ftxt(`⛑️ ${ch.name} Traits Active`,PX+PW/2,GY-PH-50,ch.glow,13);
   burst(15,ch.glow);
@@ -2166,9 +2202,9 @@ function updateTraitsHUD(){
   if(!ch)return;
   const th=$('th'),tname=$('tname'),tlist=$('tlist');
   if(!th)return;
-  
+
   if(tname)tname.textContent=ch.name.toUpperCase();
-  
+
   const traits={
     runner:'✦ Speed +15% faster',
     glider:'✦ Float slower gravity',
@@ -2188,11 +2224,11 @@ function updateTraitsHUD(){
     apex:'✦ Peak mode: 50% faster',
     phoenix:'✦ Auto-rebirth'
   };
-  
+
   if(tlist){
     tlist.innerHTML='<div class="trait">'+traits[SD.selChar]+'</div>';
   }
-  
+
   th.classList.add('vis');
 }
 
@@ -2206,7 +2242,7 @@ function checkPhxRevive(){
   return true;
 }
 
-// Particle burst effect  
+// Particle burst effect
 function burst(n,col){const m=MOB?Math.max(1,Math.ceil(n*.55)):n;for(let i=0;i<m;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*5+2;addP(player.x+PW/2,player.y+PH/2,Math.cos(a)*sp,Math.sin(a)*sp,Math.random()*6+2,col,.035);}}
 
 // ── Game Init ─────────────────────────────────────────────
@@ -2991,7 +3027,7 @@ function showCharDetail(charId){
   abNameEl.textContent=ch.ability;
   abDescEl.textContent=ch.abilDesc;
   upgradesEl.innerHTML='';
-  
+
   // Show power progression (if available) or upgrade progression
   if(ch.powers && ch.powers.length > 0) {
     upgradesEl.innerHTML='<div style="font-size:11px;color:rgba(0,245,160,.7);margin-bottom:8px;font-weight:600">POWER PROGRESSION:</div>';
@@ -3020,7 +3056,7 @@ function showCharDetail(charId){
       upgradesEl.appendChild(dup);
     });
   }
-  
+
   // Actions
   actionsEl.innerHTML='';
   const btnSelect=document.createElement('button');
@@ -3037,7 +3073,7 @@ function showCharDetail(charId){
     closeCharDetail();
   });
   actionsEl.appendChild(btnSelect);
-  
+
   if(cl<ml){
     const uc=ch.pUpg[cl],ua=SD.coins>=uc;
     const btnUpgrade=document.createElement('button');
@@ -3059,14 +3095,14 @@ function showCharDetail(charId){
     });
     actionsEl.appendChild(btnUpgrade);
   }
-  
+
   const btnClose=document.createElement('button');
   btnClose.className='btn s';
   btnClose.textContent='← Close';
   btnClose.style.flex='0.8';
   bindPressable(btnClose,closeCharDetail);
   actionsEl.appendChild(btnClose);
-  
+
   modal.classList.add('show');
 }
 
@@ -3226,5 +3262,128 @@ initBG();
 // Start main game loop
 requestAnimationFrame(loop);
 </script>
+
+<!-- BUTTON FIX: Define missing functions -->
+<script>
+// Ensure $ function is defined
+if (typeof $ === 'undefined') {
+  window.$ = id => document.getElementById(id);
+}
+
+// Ensure wire function is defined
+if (typeof wire === 'undefined') {
+  window.wire = (id, fn, opt) => {
+    const el = window.$(id);
+    if (el) window.bindPressable(el, fn, opt);
+    else console.warn(`Element not found: ${id}`);
+  };
+}
+
+// Ensure bindPressable is defined
+if (typeof bindPressable === 'undefined') {
+  window.bindPressable = (el, fn, opt) => {
+    if (!el || el.dataset.boundPressable) return;
+    el.dataset.boundPressable = '1';
+    el.classList.add('pressable');
+    const cfg = Object.assign({sound: true, preventDefault: true, stopPropagation: true}, opt || {});
+    let activeId = null, lastFire = 0, touchActive = false, fired = false;
+    const fire = e => {
+      if (fired) return;
+      const now = performance.now();
+      if (now - lastFire < 80) return;
+      lastFire = now;
+      fired = true;
+      if (cfg.preventDefault && e?.preventDefault) e.preventDefault();
+      if (cfg.stopPropagation && e?.stopPropagation) e.stopPropagation();
+      requestAnimationFrame(() => fn(e));
+      setTimeout(() => {fired = false;}, 80);
+    };
+    const clear = () => {activeId = null; touchActive = false; el.classList.remove('pressing');};
+    el.addEventListener('pointerdown', e => {
+      if (e.button != null && e.button !== 0) return;
+      if (cfg.preventDefault) e.preventDefault();
+      if (cfg.stopPropagation) e.stopPropagation();
+      activeId = e.pointerId;
+      el.classList.add('pressing');
+      if (el.setPointerCapture) {try{el.setPointerCapture(e.pointerId);}catch(_e){}}
+    }, {passive: false});
+    el.addEventListener('pointerup', e => {
+      if (activeId !== e.pointerId) return;
+      const hit = (el) => {
+        const r = el.getBoundingClientRect();
+        const margin = el.classList.contains('btn') ? 12 : 8;
+        return e.clientX >= r.left - margin && e.clientX <= r.right + margin && e.clientY >= r.top - margin && e.clientY <= r.bottom + margin;
+      };
+      const isHit = hit(el);
+      clear();
+      if (isHit) fire(e);
+    }, {passive: false});
+    el.addEventListener('click', e => {
+      if (performance.now() - lastFire < 80) {
+        if (cfg.preventDefault) e.preventDefault();
+        if (cfg.stopPropagation) e.stopPropagation();
+        return;
+      }
+      fire(e);
+    }, {passive: false});
+  };
+}
+
+// Wire all buttons - re-do them in case main script didn't
+console.log('Button fix script running - wiring buttons...');
+setTimeout(() => {
+  if (typeof wire === 'undefined') {
+    console.warn('wire function not available in button fix');
+    return;
+  }
+
+  console.log('startGame available?', typeof startGame !== 'undefined');
+  console.log('openShop available?', typeof openShop !== 'undefined');
+  console.log('openModeScreen available?', typeof openModeScreen !== 'undefined');
+
+  // Music toggle
+  wire('bgm-toggle', () => toggleBGM?.());
+  // START SCREEN
+  wire('bplay', () => startGame?.());
+  wire('bmode', () => openModeScreen?.());
+  wire('bshop', () => openShop?.());
+  wire('bpass', () => openPass?.());
+  wire('bmis',  () => openMissions?.());
+  wire('bchrs', () => openChars?.());
+  wire('bach',  () => openAchiev?.());
+  wire('btrophy',() => openTrophyRoad?.());
+  wire('btrsclose',() => showMenu?.());
+
+  // MODE SCREEN
+  wire('bmodok', () => {chooseMode?.(curMode);showMenu?.();});
+  wire('bmodbk', () => showMenu?.());
+
+  // SHOP
+  wire('bshclose', () => showMenu?.());
+
+  // PASS
+  wire('bpasclose', () => showMenu?.());
+
+  // MISSIONS
+  wire('bmisclose', () => showMenu?.());
+
+  // ACHIEVEMENTS
+  wire('bachclose', () => showMenu?.());
+
+  // CHARACTERS
+  wire('bchrsclose', () => showMenu?.());
+
+  // GAME OVER
+  wire('brestart', () => startGame?.());
+  wire('bchest',   () => showChest?.());
+  wire('bgomenu',  () => goToMenu?.());
+
+  // ABILITY
+  wire('mab', () => activateAbility?.(), {sound: false});
+
+  console.log('Button wiring completed');
+}, 100);
+</script>
+
 </body>
 </html>
