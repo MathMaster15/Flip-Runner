@@ -1803,8 +1803,14 @@ function showScreen(id){
   if(!shown)console.warn(`Screen not found: ${id}`);
 }
 
+// ── Kinematic Physics Parameters ────────────────────────
+const KINEMATIC_JUMP_HEIGHT=140; // Peak jump height in pixels
+const KINEMATIC_TIME_TO_APEX=20; // 60Hz frames to reach apex (~0.33s)
+const KINEMATIC_GRAVITY=(2*KINEMATIC_JUMP_HEIGHT)/Math.pow(KINEMATIC_TIME_TO_APEX,2);
+const KINEMATIC_JUMP_VEL=-(2*KINEMATIC_JUMP_HEIGHT)/KINEMATIC_TIME_TO_APEX;
+
 // ── Game Constants ────────────────────────────────────────
-const GY=H-70,GR=0.65,PW=30,PH=36,PX=90,PLH=18;
+const GY=H-70,GR=KINEMATIC_GRAVITY,PW=30,PH=36,PX=90,PLH=18;
 const BS=5,MS=16,SA=0.001;
 const COY=8,JBF=10,NMR=36,PPX=20,DDR=12;
 const MILESTONES=[100,300,600,1200,2000,3500,6000];
@@ -2516,6 +2522,7 @@ function showGameOver(){
   const nrb=$('nrb');if(nrb)nrb.classList.toggle('show',isNew);
   hideAllGameHUD();
   const gos=$('gos');if(gos)gos.classList.remove('H');
+  const bchest=$('bchest');if(bchest)bchest.style.display=chestClaimedThisRun?'none':'';
   sfxDeath();
 }
 
@@ -6007,6 +6014,12 @@ initBG();
 
 // Start main game loop
 requestAnimationFrame(loop);
+
+// Auto-save progress whenever the player closes or backgrounds the app
+window.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') save();
+});
+window.addEventListener('pagehide', save);
 </script>
 
 </body>
