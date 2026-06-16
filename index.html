@@ -111,11 +111,11 @@ canvas#C{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch
   pointer-events:all;
   padding:max(0px,var(--st)) max(0px,var(--sr)) max(10px,var(--sb)) max(0px,var(--sl));
   box-sizing:border-box;
-  transition:opacity .4s cubic-bezier(0.16,1,0.3,1),transform .4s cubic-bezier(0.16,1,0.3,1),filter .4s cubic-bezier(0.16,1,0.3,1),visibility .4s;
-  will-change:opacity,transform,filter;
+  transition:opacity .4s cubic-bezier(0.16,1,0.3,1),transform .4s cubic-bezier(0.16,1,0.3,1),visibility .4s;
+  will-change:opacity,transform;
   transform:translateZ(0);
 }
-.scr.H{opacity:0;pointer-events:none;transform:scale(0.96) translateY(20px);filter:blur(8px);visibility:hidden;}
+.scr.H{opacity:0;pointer-events:none;transform:scale(0.96) translateY(20px);visibility:hidden;}
 
 /* ══ TOP HUD ══ */
 #top-hud{
@@ -721,6 +721,14 @@ canvas#C{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch
   margin-top: 10px;
   background: rgba(255,255,255,0.02);
 }
+.chrs-desc-box {
+  max-height: 120px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.chrs-desc-box::-webkit-scrollbar {
+  display: none;
+}
 .chrs-lv-sec {
   background: rgba(0,0,0,0.5);
   border: 1px solid rgba(255,255,255,0.1);
@@ -887,25 +895,86 @@ canvas#C{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch
 @media (max-width: 768px) {
   #chrs-showcase {
     flex-direction: column !important;
-    padding-top: 60px !important;
-    padding-bottom: 140px !important;
+    padding-top: 70px !important;
+    padding-bottom: 130px !important;
     overflow-y: auto;
   }
   #chrs-left, #chrs-right {
     width: 100% !important;
     height: auto !important;
     overflow-y: visible !important;
+    padding: 12px 16px !important;
+    gap: 10px !important;
+    box-sizing: border-box;
   }
   #chrs-center {
-    height: 45vh !important;
+    height: 38vh !important;
     flex: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
   }
   .chrs-canvas-model {
-    width: min(90vw, 45vh);
-    height: min(90vw, 45vh);
+    width: min(85vw, 38vh) !important;
+    height: min(85vw, 38vh) !important;
   }
   #chrs-bottom {
-    height: 110px !important;
+    height: 100px !important;
+    padding: 6px 12px !important;
+  }
+  .chrs-mini-card {
+    width: 60px !important;
+    height: 60px !important;
+    flex: 0 0 60px !important;
+  }
+  .chrs-mini-icon {
+    font-size: 20px !important;
+  }
+}
+
+/* Landscape Mode Optimization (short viewports) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .chrsh {
+    padding: 10px 15px !important;
+  }
+  .chrst {
+    font-size: 24px !important;
+  }
+  #bchrsclose {
+    font-size: 10px !important;
+    padding: 6px 12px !important;
+  }
+  #chrs-showcase {
+    flex-direction: row !important;
+    padding-top: 55px !important;
+    padding-bottom: 95px !important;
+  }
+  #chrs-left, #chrs-right {
+    width: 250px !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    padding: 10px !important;
+    gap: 8px !important;
+  }
+  #chrs-center {
+    height: 100% !important;
+    flex: 1 !important;
+    margin: 0 !important;
+  }
+  .chrs-canvas-model {
+    width: min(40vw, 45vh) !important;
+    height: min(40vw, 45vh) !important;
+  }
+  #chrs-bottom {
+    height: 90px !important;
+    padding: 5px 15px !important;
+  }
+  .chrs-mini-card {
+    width: 54px !important;
+    height: 54px !important;
+    flex: 0 0 54px !important;
   }
 }
 
@@ -1143,6 +1212,13 @@ canvas#C{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch
     
     <!-- Center Panel -->
     <div id="chrs-center" style="flex:1;height:100%;position:relative;display:flex;justify-content:center;align-items:center;">
+      <div class="chrs-stage-glow"></div>
+      <div class="chrs-canvas-container chrs-enter" id="chrs-canvas-container">
+        <canvas id="chrs-canvas" class="chrs-canvas-model" width="500" height="500"></canvas>
+      </div>
+      <div id="chrs-center-watermark" style="position:absolute; bottom:20px; font-family:'Bebas Neue', sans-serif; font-size:clamp(40px, 8vw, 100px); letter-spacing:12px; color:rgba(255,255,255,0.04); user-select:none; pointer-events:none; z-index:1; white-space:nowrap; transition: all 0.3s; text-shadow:0 0 20px rgba(255,255,255,0.05);"></div>
+      <button class="btn s chrs-nav-btn" id="chrs-btn-prev" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); z-index:10; padding:12px; border-radius:50%; width:56px; height:56px; font-size:22px; display:flex; justify-content:center; align-items:center;">◀</button>
+      <button class="btn s chrs-nav-btn" id="chrs-btn-next" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); z-index:10; padding:12px; border-radius:50%; width:56px; height:56px; font-size:22px; display:flex; justify-content:center; align-items:center;">▶</button>
     </div>
     
     <!-- Right Panel -->
@@ -1153,7 +1229,7 @@ canvas#C{display:block;position:absolute;left:0;top:0;image-rendering:auto;touch
   <!-- Bottom Bar: Collection -->
   <div id="chrs-bottom" style="position:absolute;bottom:0;left:0;right:0;height:120px;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;padding:10px 20px;z-index:100;">
      <div style="font-size:10px; color:var(--tx); letter-spacing:2px; text-transform:uppercase; font-weight:bold; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-end;">
-        <span>ROSTER</span>
+        <span>Runners:</span>
         <span style="font-size:8px; color:var(--mu); font-weight:normal;">SWIPE TO BROWSE</span>
      </div>
      <div id="chrs-collection" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;"></div>
@@ -6564,92 +6640,113 @@ function renderChrsShowcase() {
   const upgCost = !isMax ? ch.pUpg[lv] : 0;
   const canUpg = owned && !isMax && SD.coins >= upgCost;
   const pct = ml > 0 ? (lv / ml) * 100 : 100;
+  
+  const canBuy = !owned && (ch.cur==='gems' ? SD.gems >= ch.price : SD.coins >= ch.price);
+  const healthVal = Math.round((40 + lv * 10) * 100);
+  const speedPercent = ch.fallMult * 40 + lv * 5;
+  const speedVal = (speedPercent * 0.1).toFixed(1) + ' ft/s';
 
   // Left Panel - Info
   $('chrs-left').innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-      <div>
-        <div style="font-family:'Bebas Neue', sans-serif; font-size:42px; letter-spacing:3px; color:var(--tx); line-height:1; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${ch.name}</div>
-        <div class="chrs-role">${roleStr}</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+        <div style="font-family:'Bebas Neue', sans-serif; font-size:40px; letter-spacing:2px; color:var(--tx); line-height:0.95; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${ch.name.split(' ').join('<br>')}</div>
+        <div class="rar ${rarCls(ch.rarity)}" style="font-size:9px; padding:4px 8px; box-shadow:0 0 10px rgba(0,0,0,0.5); text-transform:uppercase; height:fit-content; white-space:nowrap;">${rarNm(ch.rarity)}</div>
       </div>
-      <div class="rar ${rarCls(ch.rarity)}" style="font-size:12px; padding:6px 14px; box-shadow:0 0 15px rgba(0,0,0,0.5);">${rarNm(ch.rarity)}</div>
+      <div class="chrs-role" style="font-size:10px; font-weight:bold; color:var(--pr); letter-spacing:2px; margin-top:2px;">${roleStr}</div>
     </div>
 
-    <div class="chrs-pwr-badge">
-      <span style="font-size:28px; filter:drop-shadow(0 0 10px rgba(255,215,0,0.6)); text-shadow:0 0 10px #fbbf24;">⚡</span>
-      <div style="display:flex; flex-direction:column;">
-        <span style="font-size:9px; color:var(--go); letter-spacing:2px; font-weight:bold;">TOTAL POWER RATING</span>
-        <span style="font-family:'Bebas Neue', sans-serif; font-size:36px; color:var(--tx); line-height:1; filter:drop-shadow(0 0 4px rgba(255,255,255,0.3));">${pwr}</span>
-      </div>
+    <div class="chrs-pwr-badge" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:rgba(0,0,0,0.6); border:2px solid #fbbf24; padding:8px 12px; border-radius:8px; width:100%; box-sizing:border-box; margin-top:4px; box-shadow:0 4px 15px rgba(0,0,0,0.4), inset 0 0 10px rgba(251,191,36,0.15);">
+      <span style="font-family:'Bebas Neue', sans-serif; font-size:32px; color:#fbbf24; line-height:1; letter-spacing:1px; display:flex; align-items:center; gap:6px;">⚡ ${pwr}</span>
+      <span style="font-size:8px; color:#aaa; letter-spacing:2px; font-weight:bold; text-transform:uppercase; text-align:center;">Total Power Rating</span>
     </div>
 
-    <div class="chrs-desc">${descStr}</div>
-    
-    <div class="chrs-abil-card">
-      <div style="font-size:10px; color:var(--pr); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-weight:bold; display:flex; align-items:center; gap:6px;">
-        <span style="font-size:16px;">🌟</span> SIGNATURE ABILITY
-      </div>
-      <div style="font-family:'Bebas Neue', sans-serif; font-size:28px; color:var(--tx); letter-spacing:2px; line-height:1; text-shadow:0 0 10px rgba(255,255,255,0.2);">${ch.ability}</div>
-      <div style="font-size:12px; color:var(--tx); opacity:0.8; margin-top:8px; line-height:1.5;">${ch.abilDesc}</div>
+    <div style="background:linear-gradient(135deg, rgba(20,20,30,0.8), rgba(10,10,15,0.9)); border:1px solid rgba(255,255,255,0.1); border-left:3px solid var(--pr); padding:10px 12px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.5); margin-top:4px;">
+      <div style="font-size:8px; color:var(--pr); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; font-weight:bold;">SPECIAL FEATURE</div>
+      <div style="font-family:'Bebas Neue', sans-serif; font-size:22px; color:var(--tx); letter-spacing:1px; line-height:1; margin-bottom:4px;">${ch.ability}</div>
+      <div style="font-size:11px; color:#ccc; line-height:1.4;">${ch.abilDesc}</div>
     </div>
 
-    <div class="chrs-lore">" ${loreStr} "</div>
+    <div style="display:flex; flex-direction:column; gap:4px; flex:1; min-height:100px; margin-top:4px;">
+      <div style="font-size:8px; color:#888; letter-spacing:2px; font-weight:bold; text-transform:uppercase;">DESCRIPTION</div>
+      <div class="chrs-desc-box" style="flex:1; overflow-y:auto; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.05); padding:10px; border-radius:8px; font-size:11px; color:#aaa; line-height:1.4; scrollbar-width:none;">
+        <div style="margin-bottom:6px;">${descStr}</div>
+        <div style="font-style:italic; color:#666; border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:6px;">"${loreStr}"</div>
+      </div>
+    </div>
   `;
 
-  // Center Panel - Showcase
-  $('chrs-center').innerHTML = `
-    <div class="chrs-stage-glow" style="--cglow: ${ch.glow};"></div>
-    <div class="chrs-canvas-container chrs-enter" id="chrs-canvas-container" style="--cglow: ${ch.glow};">
-      <canvas id="chrs-canvas" class="chrs-canvas-model" width="500" height="500"></canvas>
-    </div>
-    <div style="position:absolute; bottom:20px; font-family:'Bebas Neue', sans-serif; font-size:clamp(40px, 8vw, 100px); letter-spacing:12px; color:rgba(255,255,255,0.04); user-select:none; pointer-events:none; z-index:1; white-space:nowrap; transition: all 0.3s; text-shadow:0 0 20px rgba(255,255,255,0.05);">${ch.name}</div>
-    <button class="btn s chrs-nav-btn" id="chrs-btn-prev" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); z-index:10; padding:12px; border-radius:50%; width:56px; height:56px; font-size:22px; display:flex; justify-content:center; align-items:center;">◀</button>
-    <button class="btn s chrs-nav-btn" id="chrs-btn-next" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); z-index:10; padding:12px; border-radius:50%; width:56px; height:56px; font-size:22px; display:flex; justify-content:center; align-items:center;">▶</button>
-  `;
+  // Center Panel - Showcase update (optimized dynamic style injection)
+  const glowEl = document.querySelector('.chrs-stage-glow');
+  if (glowEl) glowEl.style.setProperty('--cglow', ch.glow);
+  const canvasContainer = $('chrs-canvas-container');
+  if (canvasContainer) canvasContainer.style.setProperty('--cglow', ch.glow);
+  const watermark = $('chrs-center-watermark');
+  if (watermark) watermark.textContent = ch.name;
 
-  // Right Panel - Upgrades
+  // Right Panel - Upgrades & Trophy Progression Tree
+  const playerTrophies = SD.trophyPts || 0;
   let treeHtml = '';
-  if(ch.powers) {
-    ch.powers.forEach((pw, i) => {
-      const unlocked = lv >= pw.lv;
-      treeHtml += `
-        <div class="chrs-tree-node ${unlocked ? 'UNLOCKED' : ''}">
-          <div class="chrs-tree-icon">${unlocked ? '✓' : '🔒'}</div>
-          <div>
-            <div style="font-size:11px; color:${unlocked ? '#fff' : '#888'}; font-weight:bold; letter-spacing:1px;">Lv.${pw.lv}: ${pw.name}</div>
-            <div style="font-size:9px; color:#aaa; margin-top:4px;">${pw.desc}</div>
-          </div>
+  const trophyMilestones = [
+    { tp: 100, reward: 'New Feature' },
+    { tp: 500, reward: '100 Coins' },
+    { tp: 1000, reward: 'New Background' },
+    { tp: 1500, reward: 'New Skin' },
+    { tp: 2000, reward: '10 Gems' },
+    { tp: 2500, reward: '5 Gems' },
+    { tp: 3000, reward: '500 Coins' }
+  ];
+  trophyMilestones.forEach(m => {
+    const unlocked = playerTrophies >= m.tp;
+    treeHtml += `
+      <div class="chrs-tree-node ${unlocked ? 'UNLOCKED' : ''}">
+        <div class="chrs-tree-icon">${unlocked ? '✓' : '🔒'}</div>
+        <div>
+          <div style="font-size:11px; color:${unlocked ? '#fff' : '#888'}; font-weight:bold; letter-spacing:1px;">${m.tp} Trophies</div>
+          <div style="font-size:9px; color:#aaa; margin-top:4px;">Reward: ${m.reward}</div>
         </div>
-      `;
-    });
-  }
+      </div>
+    `;
+  });
 
   $('chrs-right').innerHTML = `
-    <div class="chrs-lv-sec" style="margin-top:0;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;">
-        <span style="font-family:'Bebas Neue', sans-serif; font-size:36px; color:var(--go); line-height:1; text-shadow:0 0 10px rgba(251,191,36,0.3);">Lv. ${lv + 1} <span style="font-size:18px; color:var(--mu); font-family:'Space Mono', monospace;">/ ${ml + 1}</span></span>
-        <span style="font-size:10px; color:var(--mu); letter-spacing:1px; text-transform:uppercase;">Next: ${ch.upgrades[lv] ? ch.upgrades[lv].name : 'MAX'}</span>
+    <div class="chrs-lv-sec" style="margin-top:0; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <span style="font-family:'Bebas Neue', sans-serif; font-size:32px; color:var(--go); line-height:1; text-shadow:0 0 10px rgba(251,191,36,0.3);">Lv. ${lv + 1} <span style="font-size:16px; color:var(--mu); font-family:'Space Mono', monospace;">/ ${ml + 1}</span></span>
+        <span style="font-size:9px; color:var(--mu); letter-spacing:1px; text-transform:uppercase;">Next: ${ch.upgrades[lv] ? ch.upgrades[lv].name : 'MAX'}</span>
       </div>
       
       <!-- Stats -->
-      <div style="margin-bottom:15px; padding:12px; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
-         <div class="chrs-stat-row"><div class="chrs-stat-label">HEALTH</div><div class="chrs-stat-bar"><div class="chrs-stat-fill" style="width:${40+lv*10}%"></div></div></div>
-         <div class="chrs-stat-row"><div class="chrs-stat-label">SPEED</div><div class="chrs-stat-bar"><div class="chrs-stat-fill" style="width:${ch.fallMult*40+lv*5}%"></div></div></div>
-         <div class="chrs-stat-row"><div class="chrs-stat-label">ABILITY</div><div class="chrs-stat-bar"><div class="chrs-stat-fill" style="width:${50+lv*8}%"></div></div></div>
+      <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px; display:flex; flex-direction:column; gap:8px;">
+         <div class="chrs-stat-row" style="margin-bottom:0; flex-direction:column; align-items:flex-start; gap:4px;">
+           <div style="display:flex; justify-content:space-between; width:100%; font-size:9px;">
+             <span class="chrs-stat-label" style="width:auto; font-weight:bold; letter-spacing:1px;">HEALTH</span>
+             <span style="color:var(--tx); font-family:'Space Mono', monospace; font-weight:bold;">${healthVal}</span>
+           </div>
+           <div class="chrs-stat-bar" style="width:100%; height:8px;"><div class="chrs-stat-fill" style="width:${40+lv*10}%; background:linear-gradient(90deg, #ff4444, #ff8888);"></div></div>
+         </div>
+         <div class="chrs-stat-row" style="margin-bottom:0; flex-direction:column; align-items:flex-start; gap:4px;">
+           <div style="display:flex; justify-content:space-between; width:100%; font-size:9px;">
+             <span class="chrs-stat-label" style="width:auto; font-weight:bold; letter-spacing:1px;">SPEED</span>
+             <span style="color:var(--tx); font-family:'Space Mono', monospace; font-weight:bold;">${speedVal}</span>
+           </div>
+           <div class="chrs-stat-bar" style="width:100%; height:8px;"><div class="chrs-stat-fill" style="width:${speedPercent}%; background:linear-gradient(90deg, #00f5a0, #88ffcc);"></div></div>
+         </div>
       </div>
 
-      <div style="display:flex; gap:10px;">
+      <div style="display:flex; gap:10px; margin-top:4px;">
         ${owned ? (
             SD.selChar === scChar 
-            ? `<button class="btn s" style="flex:1; pointer-events:none; border-color:var(--pr); color:var(--pr); background:rgba(0,245,160,0.1); font-weight:bold; letter-spacing:1px;">✓ EQUIPPED</button>`
-            : `<button class="btn p" id="chrs-btn-equip" style="flex:1; font-weight:bold; letter-spacing:1px; box-shadow:0 0 15px rgba(0,245,160,0.4);">EQUIP</button>`
-          ) : `<button class="btn s" style="flex:1; pointer-events:none; opacity:0.5; font-weight:bold; letter-spacing:1px;">🔒 ${ch.price} ${ch.cur==='gems'?'💎':'🪙'}</button>`
+            ? `<button class="btn s" style="flex:1; pointer-events:none; border-color:var(--pr); color:var(--pr); background:rgba(0,245,160,0.1); font-weight:bold; font-size:11px; padding:10px 5px; letter-spacing:1px;">✓ EQUIPPED</button>`
+            : `<button class="btn p" id="chrs-btn-equip" style="flex:1; font-weight:bold; font-size:11px; padding:10px 5px; letter-spacing:1px; box-shadow:0 0 15px rgba(0,245,160,0.4);">EQUIP</button>`
+          ) : `<button class="btn s" style="flex:1; pointer-events:none; opacity:0.5; font-weight:bold; font-size:11px; padding:10px 5px; letter-spacing:1px;">🔒 ${ch.price} ${ch.cur==='gems'?'💎':'🪙'}</button>`
         }
         ${!isMax && owned ? `
-          <button class="btn ${canUpg ? 'g' : 's'}" id="chrs-btn-upg" style="flex:1; display:flex; gap:6px; justify-content:center; align-items:center; font-weight:bold; letter-spacing:1px; ${canUpg ? 'box-shadow:0 0 15px rgba(255,215,0,0.4);' : ''}">
-            <span>⬆️ UPGRADE</span> <span style="font-size:10px;">(${upgCost} 🪙)</span>
+          <button class="btn ${canUpg ? 'g' : 's'}" id="chrs-btn-upg" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; font-weight:bold; font-size:10px; padding:8px 5px; letter-spacing:0.5px; ${canUpg ? 'box-shadow:0 0 15px rgba(255,215,0,0.4);' : ''}">
+            <span>UPGRADE</span>
+            <span style="font-size:8px; font-weight:normal; opacity:0.8; margin-top:2px;">(${upgCost} 🪙)</span>
           </button>
-        ` : (isMax && owned ? `<button class="btn s" style="flex:1; pointer-events:none; color:var(--go); border-color:var(--go); font-weight:bold; letter-spacing:1px;">MAXED</button>` : (!owned ? `<button class="btn ${canUpg ? 'g' : 's'}" id="chrs-btn-buy" style="flex:1; display:flex; justify-content:center; align-items:center; font-weight:bold; letter-spacing:1px; ${canUpg ? 'box-shadow:0 0 15px rgba(0,245,160,0.4);' : ''}">UNLOCK</button>` : ''))}
+        ` : (isMax && owned ? `<button class="btn s" style="flex:1; pointer-events:none; color:var(--go); border-color:var(--go); font-weight:bold; font-size:11px; padding:10px 5px; letter-spacing:1px;">MAXED</button>` : (!owned ? `<button class="btn ${canBuy ? 'g' : 's'}" id="chrs-btn-buy" style="flex:1; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:11px; padding:10px 5px; letter-spacing:1px; ${canBuy ? 'box-shadow:0 0 15px rgba(0,245,160,0.4);' : ''}">UNLOCK</button>` : ''))}
       </div>
     </div>
 
